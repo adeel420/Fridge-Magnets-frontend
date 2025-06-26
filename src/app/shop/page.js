@@ -37,7 +37,7 @@ const Page = () => {
             key={product._id}
             className="bg-white rounded-2xl shadow-md overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:border hover:border-[#dd492b] transition duration-300 cursor-pointer"
           >
-            <a href={`/shop/${product._id}`}>
+            <Link href={`/shop/${product._id}`}>
               {/* Image Container */}
               <div className="h-72 sm:h-80 flex items-center justify-center bg-[#f6f6f6]">
                 <Image
@@ -59,7 +59,7 @@ const Page = () => {
                   £{product.price}
                 </p>
               </div>
-            </a>
+            </Link>
           </div>
         ))}
       </div>
