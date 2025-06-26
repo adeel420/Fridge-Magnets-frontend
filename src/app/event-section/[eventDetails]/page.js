@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import axios from "axios";
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
@@ -52,6 +52,9 @@ const EventDetails = () => {
           <Image
             src={event.image}
             alt={event?.title}
+            height={500}
+            width={100}
+            priority
             className="w-full h-auto max-h-[500px] object-cover rounded-lg"
           />
         )}
