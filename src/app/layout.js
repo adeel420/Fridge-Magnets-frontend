@@ -1,10 +1,7 @@
-"use client";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -14,10 +11,6 @@ const poppins = Poppins({
 });
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-  const hideHeader = pathname.startsWith("/dashboard");
-  const hideFooter = pathname.startsWith("/dashboard");
-
   return (
     <html lang="en" className={poppins.variable}>
       <head>
@@ -25,9 +18,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.jpeg" type="image/jpeg" />
       </head>
       <body className="antialiased font-poppins">
-        {!hideHeader && <Header />}
-        {children}
-        {!hideFooter && <Footer />}
+        <LayoutWrapper>{children}</LayoutWrapper>
         <Toaster />
       </body>
     </html>
