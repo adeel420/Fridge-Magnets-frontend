@@ -128,7 +128,7 @@ const CheckoutForm = ({ amount, handleDeleteAll }) => {
           images: item.uploadedImages?.images?.map((img) => img.url) || [],
         }));
 
-        products.forEach((p, index) => console.log(`Product ${index + 1}:`, p));
+        // products.forEach((p, index) => console.log(`Product ${index + 1}:`, p));
 
         const orderData = {
           products,

@@ -35,7 +35,7 @@ const Page = () => {
           },
         }
       );
-      console.log(response.data);
+    
       setUser(response.data);
       setUserName(response.data.email);
     } catch (err) {
@@ -102,7 +102,7 @@ const Page = () => {
         );
         setCart(response.data);
       } catch (err) {
-        console.log(err);
+ 
       }
     };
 
@@ -120,7 +120,7 @@ const Page = () => {
         const buyerEmails = response.data.map((order) => order.buyer.email);
         setPreviousBuyers(buyerEmails);
       } catch (err) {
-        console.log(err);
+      
       }
     };
 
@@ -139,7 +139,7 @@ const Page = () => {
         }
       );
 
-      console.log("Delete all response:", response.data);
+      
       setCart([]);
     } catch (err) {
       console.error("Delete all error:", err);
