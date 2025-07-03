@@ -148,7 +148,7 @@ export default function Home() {
               Add a Personal Touch
             </h3>
             <p className="text-gray-600 text-sm sm:text-base">
-              Customize with text, filters, or special effects
+              Customise with text, filters, or special effects
             </p>
           </div>
 
