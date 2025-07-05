@@ -35,7 +35,7 @@ const Page = () => {
           },
         }
       );
-    
+
       setUser(response.data);
       setUserName(response.data.email);
     } catch (err) {
@@ -46,15 +46,6 @@ const Page = () => {
   useEffect(() => {
     handleLogin();
   }, []);
-
-  const handleRemove = async (id) => {
-    try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/cart/${id}`);
-      handleSuccess("Item deleted successfully");
-    } catch (err) {
-      handleError(err);
-    }
-  };
 
   const total =
     cart.length > 0
@@ -94,18 +85,16 @@ const Page = () => {
   };
 
   // get orders by user
-  useEffect(() => {
-    const handleGetById = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/cart/${user.id}`
-        );
-        setCart(response.data);
-      } catch (err) {
- 
-      }
-    };
+  const handleGetById = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/${user.id}`
+      );
+      setCart(response.data);
+    } catch (err) {}
+  };
 
+  useEffect(() => {
     if (user.id) {
       handleGetById();
     }
@@ -119,9 +108,7 @@ const Page = () => {
         );
         const buyerEmails = response.data.map((order) => order.buyer.email);
         setPreviousBuyers(buyerEmails);
-      } catch (err) {
-      
-      }
+      } catch (err) {}
     };
 
     if (user.id) {
@@ -139,10 +126,19 @@ const Page = () => {
         }
       );
 
-      
       setCart([]);
     } catch (err) {
       console.error("Delete all error:", err);
+    }
+  };
+
+  const handleRemove = async (id) => {
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/cart/${id}`);
+      handleSuccess("Item deleted successfully");
+      handleGetById();
+    } catch (err) {
+      handleError(err);
     }
   };
 

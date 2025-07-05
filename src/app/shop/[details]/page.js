@@ -14,8 +14,7 @@ const Details = () => {
   const [product, setProduct] = useState(null);
   const [size, setSize] = useState("");
   const [popup, setPopup] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [text, setText] = useState("");
+  const [imageData, setImageData] = useState([]); // [{ file, message }]
   const [next, setNext] = useState([]);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState("");
@@ -26,32 +25,23 @@ const Details = () => {
   const [token, setToken] = useState("");
 
   const router = useRouter();
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken || "");
-  }, []);
-
-  const removeImage = (index) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const params = useParams();
   const id = params.details;
 
-  const handlePopup = () => {
-    setPopup(!popup);
-  };
+  useEffect(() => {
+    setToken(localStorage.getItem("token") || "");
+  }, []);
+
+  const handlePopup = () => setPopup(!popup);
 
   useEffect(() => {
     if (!id) return;
-
-    const handleGet = async () => {
+    const fetchProduct = async () => {
       try {
-        const response = await axios.get(
+        const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/product/${id}`
         );
-        const data = response.data;
+        const data = res.data;
         setProduct(data);
         setSelectedImg(data?.images?.[0]?.url || null);
         setSize(data?.size || "");
@@ -59,16 +49,15 @@ const Details = () => {
         handleError(err);
       }
     };
-
-    handleGet();
+    fetchProduct();
   }, [id]);
 
-  const handleGetComments = async () => {
+  const fetchComments = async () => {
     try {
-      const response = await axios.get(
+      const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/comment/${id}`
       );
-      setComments(response.data);
+      setComments(res.data);
     } catch (error) {
       handleError("Failed to load comments");
       console.log(error);
@@ -77,52 +66,40 @@ const Details = () => {
 
   useEffect(() => {
     if (!id) return;
-    handleGetComments();
+    fetchComments();
   }, [id]);
 
   const handleComment = async (e) => {
     e.preventDefault();
-    if (!token) {
+    if (!token)
       return handleError("Please create an account before posting comments");
-    }
-
-    if (!rating || !comment) {
+    if (!rating || !comment)
       return handleError("Please enter rating and comment");
-    }
+
     setLoading(true);
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/comment/`,
-        {
-          comment,
-          rating,
-          user: user.id,
-          product: id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { comment, rating, user: user.id, product: id },
+        { headers: { "Content-Type": "application/json" } }
       );
       setComment("");
       setRating("");
-      handleGetComments();
+      fetchComments();
       handleSuccess("Comment posted successfully");
     } catch (err) {
-      // handleError("Error posting comment:", err);
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGetBySize = async (selectedSizeId) => {
+  const handleGetBySize = async (sizeId) => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/product/size/${selectedSizeId}`
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/product/size/${sizeId}`
       );
-      const data = response.data;
+      const data = res.data;
       if (data.length > 0) {
         setProduct(data[0]);
         setSelectedImg(data[0]?.images?.[0]?.url || null);
@@ -139,20 +116,11 @@ const Details = () => {
   const handleLogin = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        console.warn("Token not found");
-        return;
-      }
-
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setUser(response.data);
+      if (!token) return;
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(res.data);
     } catch (err) {
       handleError("Login failed:", err.response?.data || err.message);
     }
@@ -165,49 +133,52 @@ const Details = () => {
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const maxFiles = product?.orders || 0;
-    const totalFiles = files.length + selectedFiles.length;
-
-    if (totalFiles > maxFiles) {
+    if (imageData.length + selectedFiles.length > maxFiles) {
       return handleError(`You must upload exactly ${maxFiles} images.`);
     }
+    const newData = selectedFiles.map((file) => ({ file, message: "" }));
+    setImageData((prev) => [...prev, ...newData]);
+  };
 
-    setFiles([...files, ...selectedFiles]);
+  const handleMessageChange = (i, value) => {
+    setImageData((prev) =>
+      prev.map((item, idx) => (idx === i ? { ...item, message: value } : item))
+    );
+  };
+
+  const removeImage = (index) => {
+    setImageData((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleClickNext = () => {
-    if (files.length.toString() === product?.orders) {
+    if (imageData.length.toString() === product?.orders) {
       setPopup(false);
-      setNext(files);
+      setNext(imageData);
     } else {
-      return handleError(`You must upload exactly ${product.orders} images.`);
+      handleError(`You must upload exactly ${product.orders} images.`);
     }
   };
 
   const handleSubmitAndAddToCart = async () => {
-    if (!token) {
+    if (!token)
       return handleError(
         "Please create an account before adding items to your cart."
       );
-    }
-    const requiredCount = Number(product?.orders);
-    const productId = product?._id;
-
-    if (!productId || typeof productId !== "string") {
-      return handleError("Invalid or missing Product ID.");
-    }
-
-    if (files.length !== requiredCount) {
-      return handleError(`You must upload exactly ${requiredCount} images.`);
+    if (imageData.length !== Number(product?.orders)) {
+      return handleError(`You must upload exactly ${product.orders} images.`);
     }
 
     const formData = new FormData();
-    formData.append("text", text);
-    formData.append("product", productId);
-    files.forEach((file) => formData.append("images", file));
+    imageData.forEach((item) => formData.append("images", item.file));
+    formData.append(
+      "messages",
+      JSON.stringify(imageData.map((item) => item.message))
+    );
+
+    formData.append("product", product._id);
 
     setLoading(true);
     try {
-      // 1. Upload images
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/image/`,
         formData,
@@ -218,43 +189,23 @@ const Details = () => {
           },
         }
       );
-
-      const uploadedData = res.data; // { images, product }
-
-      if (!uploadedData || !uploadedData.images || !uploadedData.product) {
-        return handleError("Image upload failed.");
-      }
-
-      const uploadedImageDocId =
-        uploadedData._id || uploadedData.imageId || null;
-
-      if (!uploadedImageDocId) {
-        return handleError("No uploaded image document ID returned.");
-      }
-
+      const uploadedImageDocId = res.data?._id;
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/`,
         {
-          productId: uploadedData.product,
+          productId: res.data.product,
           uploadedImageId: uploadedImageDocId,
           sizeId: size,
           quantity: 1,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       handleSuccess("All items added to cart!");
-      setFiles([]);
-      setText("");
+      setImageData([]);
       setPopup(false);
-
       router.push("/cart");
     } catch (err) {
-      console.error("Error uploading or adding to cart:", err);
       const message =
         err.response?.data?.error || err.message || "Upload or cart failed";
       handleError(message);
@@ -265,10 +216,8 @@ const Details = () => {
 
   const handleGetSize = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/size/`
-      );
-      setSizes(response.data || []);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/size/`);
+      setSizes(res.data || []);
     } catch (err) {
       handleError(err);
     }
@@ -310,9 +259,8 @@ const Details = () => {
                 <div className="absolute top-[5%] left-[32%] flex flex-wrap gap-2 w-[40%] z-10">
                   <div className="grid grid-cols-3 gap-3">
                     {next.map((file, index) => {
-                      const fileUrl = URL.createObjectURL(file);
+                      const fileUrl = URL.createObjectURL(file.file);
 
-                      // Alternate tilt for natural look
                       const tilt = index % 2 === 0 ? "-rotate-3" : "rotate-2";
 
                       return (
@@ -465,7 +413,7 @@ const Details = () => {
               You must upload Images exactly:{" "}
               <span className="text-[#dd492b]">{product?.orders}</span>
             </p>
-            {product?.title === "Personalised Message Magnet" && (
+            {/* {product?.title === "Personalised Message Magnet" && (
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -473,7 +421,7 @@ const Details = () => {
                 className="w-full border rounded-md p-2 mb-4"
                 rows={3}
               />
-            )}
+            )} */}
 
             <label className="cursor-pointer border border-dashed border-[#dd492b] text-[#dd492b] w-20 h-20 flex items-center justify-center rounded-full text-3xl mx-auto mb-4">
               +
@@ -487,16 +435,29 @@ const Details = () => {
             </label>
 
             <div className="flex flex-wrap justify-center gap-2 mb-4">
-              {files.map((file, index) => (
-                <div key={index} className="relative">
+              {imageData.map((item, index) => (
+                <div
+                  key={index}
+                  className="relative flex flex-col items-center"
+                >
                   <Image
-                    src={URL.createObjectURL(file)}
+                    src={URL.createObjectURL(item.file)}
                     alt="preview"
                     width={80}
                     height={80}
                     className="object-cover rounded"
                   />
-
+                  {product?.title === "Personalised Message Magnet" && (
+                    <input
+                      type="text"
+                      value={item.message}
+                      onChange={(e) =>
+                        handleMessageChange(index, e.target.value)
+                      }
+                      placeholder="Enter message"
+                      className="mt-1 p-1 border rounded text-sm w-20"
+                    />
+                  )}
                   <button
                     onClick={() => removeImage(index)}
                     className="absolute top-[-6px] right-[-6px] bg-white text-black rounded-full shadow p-1 text-xs"

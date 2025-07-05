@@ -152,16 +152,32 @@ const Page = () => {
                         <div className="flex flex-wrap sm:flex-nowrap items-start gap-4 border border-gray-200 rounded-lg p-3">
                           {/* Images */}
                           <div className="flex gap-2 flex-wrap">
-                            {product?.images?.map((img, i) => (
-                              <Image
-                                key={i}
-                                src={img}
-                                alt={`product-${i}`}
-                                height={56}
-                                width={56}
-                                className="w-14 h-14 object-cover border border-gray-300 rounded-md"
-                              />
-                            ))}
+                            {product?.images?.map((img, i) => {
+                              const imageUrl =
+                                typeof img === "string" ? img : img.url;
+                              const message =
+                                typeof img === "object" ? img?.message : "";
+
+                              return (
+                                <div key={i} className="relative group">
+                                  <Image
+                                    src={imageUrl}
+                                    alt={`product-${i}`}
+                                    height={56}
+                                    width={56}
+                                    className="w-14 h-14 object-cover border border-gray-300 rounded-md"
+                                  />
+
+                                  {product?.product?.title ===
+                                    "Personalised Message Magnet" &&
+                                    message && (
+                                      <div className="absolute top-full mt-1 w-max text-[10px] bg-white border border-gray-300 px-1 py-[2px] rounded shadow text-gray-700 z-10">
+                                        {message}
+                                      </div>
+                                    )}
+                                </div>
+                              );
+                            })}
                           </div>
 
                           {/* Product Info */}
@@ -201,6 +217,8 @@ const Page = () => {
             )}
           </tbody>
         </table>
+
+        {/* Events Book */}
         <h1 className="text-2xl font-bold text-[#dd492b] text-center mb-4 mt-4 w-full sm:w-auto">
           Events Booked
         </h1>
