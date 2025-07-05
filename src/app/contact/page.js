@@ -103,8 +103,8 @@ const Page = () => {
               <InfoRow
                 icon={Phone}
                 label="Phone"
-                value="07519584281"
-                href="tel:07519584281"
+                value="075-XXXXXXXX"
+                href="tel:075-XXXXXXXX"
               />
               <div className="flex items-start">
                 <Clock className="text-[#dd492b] mt-1 mr-4" size={22} />
