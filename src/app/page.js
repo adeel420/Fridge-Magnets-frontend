@@ -37,7 +37,7 @@ export default function Home() {
           FREE SHIPPING FOR ORDERS ABOVE £30.00
         </h1>
       </div>
-      <div className="pt-46 px-4">
+      <div className="pt-56 px-4">
         {loading && (
           <div
             className="fixed top-[0] left-[0] h-[100%] w-[100%] bg-[#00000041]"
