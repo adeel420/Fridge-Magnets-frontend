@@ -396,34 +396,32 @@ const Details = () => {
 
       {/* Modal */}
       {popup && (
-        <div className="fixed inset-0 bg-[#00000066] bg-opacity-50 z-50 flex items-center justify-center px-4">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <div className="fixed inset-0 bg-[#00000066] bg-opacity-60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto relative p-6">
+            {/* Close Button */}
             <button
               onClick={handlePopup}
-              className="absolute top-3 right-3 text-gray-600 hover:text-black"
+              className="absolute top-3 right-3 text-gray-600 hover:text-black transition"
             >
               <IoClose size={24} />
             </button>
 
-            <h1 className="text-center font-semibold text-lg mb-2">
+            {/* Title */}
+            <h1 className="text-center font-semibold text-xl text-[#dd492b] mb-3">
               Upload Images and Text
             </h1>
 
-            <p className="text-sm text-end text-gray-600 mb-4">
-              You must upload Images exactly:{" "}
-              <span className="text-[#dd492b]">{product?.orders}</span>
+            {/* Info Text */}
+            <p className="text-sm text-gray-600 text-center mb-4">
+              You must upload exactly{" "}
+              <span className="text-[#dd492b] font-semibold">
+                {product?.orders}
+              </span>{" "}
+              image{product?.orders > 1 ? "s" : ""}.
             </p>
-            {/* {product?.title === "Personalised Message Magnet" && (
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Enter text"
-                className="w-full border rounded-md p-2 mb-4"
-                rows={3}
-              />
-            )} */}
 
-            <label className="cursor-pointer border border-dashed border-[#dd492b] text-[#dd492b] w-20 h-20 flex items-center justify-center rounded-full text-3xl mx-auto mb-4">
+            {/* Upload Button */}
+            <label className="cursor-pointer border border-dashed border-[#dd492b] text-[#dd492b] w-20 h-20 flex items-center justify-center rounded-full text-3xl mx-auto mb-4 transition hover:bg-[#dd492b10]">
               +
               <input
                 type="file"
@@ -434,19 +432,21 @@ const Details = () => {
               />
             </label>
 
-            <div className="flex flex-wrap justify-center gap-2 mb-4">
+            {/* Preview Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
               {imageData.map((item, index) => (
                 <div
                   key={index}
-                  className="relative flex flex-col items-center"
+                  className="relative flex flex-col items-center border border-gray-200 rounded-lg p-2 shadow-sm"
                 >
                   <Image
                     src={URL.createObjectURL(item.file)}
                     alt="preview"
                     width={80}
                     height={80}
-                    className="object-cover rounded"
+                    className="object-cover rounded w-20 h-20"
                   />
+                  {/* Message Input */}
                   {product?.title === "Personalised Message Magnet" && (
                     <input
                       type="text"
@@ -454,13 +454,14 @@ const Details = () => {
                       onChange={(e) =>
                         handleMessageChange(index, e.target.value)
                       }
-                      placeholder="Enter message"
-                      className="mt-1 p-1 border rounded text-sm w-20"
+                      placeholder="Message"
+                      className="mt-2 p-1 border text-sm rounded w-full focus:outline-none focus:ring-1 focus:ring-[#dd492b]"
                     />
                   )}
+                  {/* Remove Button */}
                   <button
                     onClick={() => removeImage(index)}
-                    className="absolute top-[-6px] right-[-6px] bg-white text-black rounded-full shadow p-1 text-xs"
+                    className="absolute top-[-6px] right-[-6px] bg-white text-black border border-gray-300 rounded-full shadow p-1 text-xs hover:bg-[#dd492b] hover:text-white transition"
                   >
                     ✕
                   </button>
@@ -468,9 +469,10 @@ const Details = () => {
               ))}
             </div>
 
+            {/* Next Button */}
             <button
               onClick={handleClickNext}
-              className="w-full bg-[#dd492b] hover:bg-[#c3411f] text-white py-2 rounded font-semibold"
+              className="w-full bg-[#dd492b] hover:bg-[#c3411f] text-white py-2 rounded-lg font-semibold shadow transition"
             >
               Next
             </button>
