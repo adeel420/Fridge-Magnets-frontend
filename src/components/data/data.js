@@ -156,7 +156,7 @@ export const FAQs = [
   {
     title: "How much is shipping?",
     content:
-      "Shipping to UK Mainland is £2.99. FREE shipping is available for orders above £30.00",
+      "When order is above £30,00 will the shipping automatically come up as free.",
   },
   {
     title: "Do you ship internationally?",

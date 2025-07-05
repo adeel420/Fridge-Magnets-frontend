@@ -2,7 +2,7 @@
 
 const page = () => {
   return (
-    <div className="px-4 pt-42 md:px-20 text-gray-800 bg-white">
+    <div className="px-4 pt-52 md:px-20 text-gray-800 bg-white">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
@@ -22,7 +22,7 @@ const page = () => {
         <p className="mb-4">
           We may collect personal information such as your name, email address,
           shipping address, phone number, and images you upload to create
-          personalized products.
+          personalised products.
         </p>
 
         <h2 className="text-2xl font-semibold text-[#e94f1d] mt-6 mb-2">

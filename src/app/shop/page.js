@@ -25,7 +25,7 @@ const Page = () => {
     handleGet();
   }, []);
   return (
-    <div className="pt-28 px-4 pb-20 max-w-7xl mx-auto">
+    <div className="pt-38 px-4 pb-20 max-w-7xl mx-auto">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 text-center mt-12">
         Shop Now
       </h1>

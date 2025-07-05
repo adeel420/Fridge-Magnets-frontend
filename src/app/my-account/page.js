@@ -10,7 +10,7 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState("tab2");
 
   return (
-    <div className="pt-40 px-4 max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
+    <div className="pt-40 px-4z max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
       {/* Buttons */}
       <div className="w-full md:w-[25%] flex md:flex-col justify-center items-center gap-4">
         <button

@@ -4,6 +4,7 @@ import { handleError, handleSuccess } from "@/app/utils";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { BounceLoader } from "react-spinners";
 
 const Page = () => {
   const [products, setProducts] = useState([]);
@@ -36,7 +37,7 @@ const Page = () => {
   return (
     <div className="shadow-2xl h-full p-4 rounded-3xl">
       {/* Products */}
-      <h1 className="text-center text-2xl font-bold mb-6">Update Products</h1>
+      <h1 className="text-center text-2xl font-bold mb-6">Delete Products</h1>
       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 custom-scrollbar overflow-y-auto max-h-[80vh] px-2">
         {products.length > 0 ? (
           products.map((product) => (
@@ -77,7 +78,7 @@ const Page = () => {
             </div>
           ))
         ) : (
-          <h3 className="text-center w-full py-4 text-gray-500">
+          <h3 className="text-center bg-[pink] py-4 text-gray-500">
             No products found...
           </h3>
         )}

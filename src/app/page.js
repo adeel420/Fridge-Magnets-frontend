@@ -30,7 +30,7 @@ export default function Home() {
     }
   };
   return (
-    <div className="pt-36 px-4">
+    <div className="pt-46 px-4">
       {loading && (
         <div
           className="fixed top-[0] left-[0] h-[100%] w-[100%] bg-[#00000041]"
@@ -99,7 +99,7 @@ export default function Home() {
           </h2>
           <div className="w-24 h-1 bg-[#E84C24] mx-auto mt-4"></div>
           <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-            Creating your personalized magnets is simple and fun
+            Creating your personalised magnets is simple and fun
           </p>
         </div>
 
@@ -132,7 +132,7 @@ export default function Home() {
               Choose a Size
             </h3>
             <p className="text-gray-600 text-sm sm:text-base">
-              Select from our 4 unique magnet sizes to fit your needs
+              Choose from our 4 unique magnet sizes
             </p>
           </div>
 
@@ -164,7 +164,8 @@ export default function Home() {
               We Print & Deliver
             </h3>
             <p className="text-gray-600 text-sm sm:text-base">
-              Order online or have us live at your special event
+              Place your order online or book us to be part of your special
+              event
             </p>
           </div>
         </div>
@@ -237,8 +238,8 @@ export default function Home() {
       <div className="inset-0 bg-gradient-to-r from-[#e84118]/80 to-[#e84118]/40 rounded-2xl p-8 md:p-12 text-center">
         <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
         <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-          Want to be first to know when we&rdquo;re at an event near you or when
-          we launch new packages? Join our mailing list!
+          Want to be the first to hear about upcoming events near you or new
+          package launches? Sign up for our mailing list!
         </p>
 
         <form

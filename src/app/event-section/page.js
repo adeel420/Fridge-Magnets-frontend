@@ -91,7 +91,7 @@ const Page = () => {
   };
 
   return (
-    <div className="pt-36 px-4 pb-20 max-w-7xl mx-auto">
+    <div className="pt-46 px-4 pb-20 max-w-7xl mx-auto">
       {loading && (
         <div
           className="fixed top-[0] left-[0] h-[100%] w-[100%] bg-[#00000041]"
@@ -106,7 +106,7 @@ const Page = () => {
         </div>
       )}
       {/* Hero Section */}
-      <div className="relative rounded-2xl overflow-hidden mb-20 h-[500px]">
+      <div className="relative rounded-2xl overflow-hidden mb-20 h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] xl:h-[700px]">
         <Image
           src="https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951123/img-18_w3qc7n.jpg"
           alt="main"
@@ -114,25 +114,25 @@ const Page = () => {
           className="object-cover object-center"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#e84118]/80 to-[#e84118]/40 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#e84118]/80 to-[#e84118]/40 z-10" />
         <div className="absolute inset-0 z-20 flex items-center">
-          <div className="container mx-auto px-6 md:px-12">
+          <div className="container mx-auto px-4 sm:px-6 md:px-12">
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
                 Photofy at Your Event
               </h1>
-              <div className="w-24 h-1 bg-white mb-6"></div>
-              <p className="text-xl md:text-2xl text-white font-medium mb-8">
+              <div className="w-16 sm:w-24 h-1 bg-white mb-4 sm:mb-6"></div>
+              <p className="text-lg sm:text-xl md:text-2xl text-white font-medium mb-6 sm:mb-8">
                 Make Memories That Stick — Instantly!
               </p>
-              <p className="text-white text-lg mb-8">
+              <p className="text-sm sm:text-base md:text-lg text-white mb-6 sm:mb-8">
                 Looking for a unique and memorable way to entertain your guests?
                 Book Photofy for your next event! We capture moments throughout
                 the night and transform them into personalised magnets your
                 guests can take home the very same evening.
               </p>
               <button
-                className="bg-white hover:bg-gray-100 text-[#e84118] font-medium py-3 px-8 rounded-lg transition-colors"
+                className="bg-white hover:bg-gray-100 text-[#e84118] font-medium py-2 px-6 sm:py-3 sm:px-8 rounded-lg transition-colors text-sm sm:text-base"
                 onClick={() => router.push("#event")}
               >
                 Book Now
@@ -654,8 +654,8 @@ const Page = () => {
       <div className="inset-0 bg-gradient-to-r from-[#e84118]/80 to-[#e84118]/40 rounded-2xl p-8 md:p-12 text-center">
         <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
         <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-          Want to be first to know when we&rsquo;re at an event near you or when
-          we launch new packages? Join our mailing list!
+          Want to be the first to hear about upcoming events near you or new
+          package launches? Sign up for our mailing list!
         </p>
 
         <form
