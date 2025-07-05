@@ -121,7 +121,7 @@ const Header = () => {
         </div>
         <div className="flex items-center border-r">
           <button
-            className="flex items-center gap-2 cursor-pointer p-3 text-sm w-[120px] justify-center hover:bg-[white] hover:text-[#dd492b]"
+            className="flex items-center gap-2 cursor-pointer p-5 text-sm w-[120px] justify-center hover:bg-[white] hover:text-[#dd492b]"
             onClick={() => handleNavigate("/cart")}
           >
             <FaCartShopping /> My Cart
