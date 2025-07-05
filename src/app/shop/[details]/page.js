@@ -86,7 +86,7 @@ const Details = () => {
     if (!rating || !comment) {
       return handleError("Please enter rating and comment");
     }
-
+    setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/comment/`,
@@ -105,9 +105,12 @@ const Details = () => {
       setComment("");
       setRating("");
       handleGetComments();
+      handleSuccess("Comment posted successfully");
     } catch (err) {
-      handleError("Error posting comment:", err);
+      // handleError("Error posting comment:", err);
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
