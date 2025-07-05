@@ -32,11 +32,14 @@ export default function Home() {
   return (
     <>
       {/* Fixed */}
-      <div className="fixed top-[160px] bg-[#dd492b] w-full text-white p-4 text-center z-40">
-        <marquee className="text-sm sm:text-base">
-          FREE SHIPPING FOR ORDERS ABOVE £30.00
-        </marquee>
+      <div className="fixed top-[160px] bg-[#dd492b] w-full text-white z-40">
+        <div className="flex items-center justify-center h-12 sm:h-14">
+          <marquee className="text-sm sm:text-base">
+            FREE SHIPPING FOR ORDERS ABOVE £30.00
+          </marquee>
+        </div>
       </div>
+
       <div className="pt-56 px-4">
         {loading && (
           <div
