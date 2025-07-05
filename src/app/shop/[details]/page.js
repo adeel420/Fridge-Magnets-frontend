@@ -82,6 +82,9 @@ const Details = () => {
 
   const handleComment = async (e) => {
     e.preventDefault();
+    if (!token) {
+      return handleError("Please create an account before posting comments");
+    }
 
     if (!rating || !comment) {
       return handleError("Please enter rating and comment");
