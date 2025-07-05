@@ -63,22 +63,53 @@ const Details = () => {
     handleGet();
   }, [id]);
 
+  const handleGetComments = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/comment/${id}`
+      );
+      setComments(response.data);
+    } catch (error) {
+      handleError("Failed to load comments");
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!id) return;
-
-    const handleGetComments = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/comment/${id}`
-        );
-        setComments(response.data);
-      } catch (err) {
-        handleError(err);
-      }
-    };
-
     handleGetComments();
   }, [id]);
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+
+    if (!rating || !comment) {
+      return handleError("Please enter rating and comment");
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/comment/`,
+        {
+          comment,
+          rating,
+          user: user.id,
+          product: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setComment("");
+      setRating("");
+      handleGetComments();
+    } catch (err) {
+      handleError("Error posting comment:", err);
+      console.log(err);
+    }
+  };
 
   const handleGetBySize = async (selectedSizeId) => {
     try {
@@ -124,36 +155,6 @@ const Details = () => {
   useEffect(() => {
     handleLogin();
   }, []);
-
-  const handleComment = async (e) => {
-    e.preventDefault();
-
-    if ((!rating, !comment)) {
-      return handleError("Please enter rating and coment");
-    }
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/comment/`,
-        {
-          comment,
-          rating,
-          user: user.id,
-          product: id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setComment("");
-      setRating("");
-      handleGetComments();
-    } catch (err) {
-      handleError("Error posting comment:", err);
-    }
-  };
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
