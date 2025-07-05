@@ -33,9 +33,9 @@ export default function Home() {
     <>
       {/* Fixed */}
       <div className="fixed top-[160px] bg-[#dd492b] w-full text-white p-4 text-center z-40">
-        <h1 className="text-sm sm:text-base">
+        <marquee className="text-sm sm:text-base">
           FREE SHIPPING FOR ORDERS ABOVE £30.00
-        </h1>
+        </marquee>
       </div>
       <div className="pt-56 px-4">
         {loading && (
