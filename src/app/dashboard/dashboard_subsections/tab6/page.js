@@ -35,46 +35,48 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="shadow-2xl h-full p-4 rounded-3xl">
-      <h1 className="text-center text-2xl font-bold mt-12 mb-6">
+    <div className="shadow-2xl min-h-full p-4 sm:p-6 rounded-3xl bg-white">
+      <h1 className="text-center text-2xl sm:text-3xl font-bold text-[#333] mt-8 mb-6">
         Update Events
       </h1>
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 custom-scrollbar overflow-y-auto max-h-[80vh] px-2">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 overflow-y-auto max-h-[80vh] custom-scrollbar px-1 sm:px-2">
         {events.length > 0 ? (
           events.map((event) => (
             <div
               key={event._id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden w-full transition-transform hover:scale-[1.02]"
+              className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-md transition-transform duration-200 overflow-hidden flex flex-col"
             >
               <Image
                 src={event.image || "/default.jpg"}
                 alt="Event"
-                height={50}
-                width={100}
-                className="w-full h-48 sm:h-56 object-cover"
+                width={400}
+                height={200}
+                className="w-full h-[180px] sm:h-[200px] object-cover rounded-t-2xl"
               />
-              <div className="p-5">
-                <h2 className="text-xl font-semibold mb-2 truncate">
+
+              <div className="p-4 flex flex-col justify-between flex-grow">
+                <h2 className="text-lg font-semibold text-gray-800 mb-2 truncate">
                   {event.title}
                 </h2>
 
-                <p className="text-sm text-gray-400 mb-4">
-                  <span className="font-semibold">Description:</span>{" "}
+                <p className="text-sm text-gray-600 mb-3 leading-snug">
+                  <span className="font-medium">Description:</span>{" "}
                   {event.description?.length > 70
                     ? `${event.description.slice(0, 70)}...`
                     : event.description}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 sm:justify-between">
+
+                <div className="flex flex-col sm:flex-row gap-3 sm:justify-between mt-auto">
                   <Link
                     href={`/dashboard/dashboard_subsections/tab6/${event._id}`}
-                    className="cursor-pointer bg-[#fec204] hover:bg-[#d3a203] px-4 py-2 rounded text-center text-sm transition"
+                    className="bg-[#fec204] hover:bg-[#d3a203] text-black text-sm font-medium px-4 py-2 rounded-md text-center transition w-full sm:w-auto"
                   >
                     Update
                   </Link>
                   <button
                     onClick={() => handleDeleteEvent(event._id)}
-                    className="cursor-pointer bg-[#dc3641] hover:bg-[#cc232d] text-white px-4 py-2 rounded text-center text-sm transition"
+                    className="bg-[#dc3641] hover:bg-[#b72b35] text-white text-sm font-medium px-4 py-2 rounded-md transition w-full sm:w-auto"
                   >
                     Delete
                   </button>
@@ -83,7 +85,9 @@ const Page = () => {
             </div>
           ))
         ) : (
-          <h3 className="text-center py-4 text-gray-500">No events found...</h3>
+          <div className="col-span-full text-center py-6 text-gray-500 rounded-md">
+            No events found...
+          </div>
         )}
       </div>
     </div>

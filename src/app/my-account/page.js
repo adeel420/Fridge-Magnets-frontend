@@ -10,48 +10,36 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState("tab2");
 
   return (
-    <div className="pt-40 px-4z max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
-      {/* Buttons */}
-      <div className="w-full md:w-[25%] flex md:flex-col justify-center items-center gap-4">
-        <button
-          className={`flex items-center text-base md:text-xl p-2 cursor-pointer w-full md:max-w-[180px] justify-center gap-2 border rounded transition ${
-            activeTab === "tab1"
-              ? "bg-[#dd492b] text-white border-[#dd492b]"
-              : "text-[#dd492b] border-[#dd492b]"
-          }`}
-          onClick={() => setActiveTab("tab1")}
-        >
-          <FaUser /> Profile
-        </button>
-        <button
-          className={`flex items-center text-base md:text-xl p-2 cursor-pointer w-full md:max-w-[180px] justify-center gap-2 border rounded transition ${
-            activeTab === "tab2"
-              ? "bg-[#dd492b] text-white border-[#dd492b]"
-              : "text-[#dd492b] border-[#dd492b]"
-          }`}
-          onClick={() => setActiveTab("tab2")}
-        >
-          <GrAnnounce /> Orders
-        </button>
+    <div className="pt-40 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
+      {/* Sidebar Buttons */}
+      <div className="w-full md:w-1/4 flex flex-row md:flex-col justify-center items-center gap-4">
+        {[
+          { id: "tab1", label: "Profile", icon: <FaUser /> },
+          { id: "tab2", label: "Orders", icon: <GrAnnounce /> },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center justify-center gap-2 px-4 py-2 w-full md:max-w-[180px] rounded border font-medium text-base sm:text-lg transition cursor-pointer ${
+              activeTab === tab.id
+                ? "bg-[#dd492b] text-white border-[#dd492b]"
+                : "text-[#dd492b] border-[#dd492b] hover:bg-[#ffe9e3]"
+            }`}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* Content */}
-      <div className="w-full md:w-[75%]">
+      {/* Main Content */}
+      <div className="w-full mt-4 md:w-3/4">
         {activeTab === "tab1" && (
           <>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center pt-6 text-gray-800">
-              Update Password
-            </h1>
-            <div className="w-20 sm:w-24 h-1 bg-[#E84C24] mx-auto mt-4"></div>
             <Tab1 />
           </>
         )}
         {activeTab === "tab2" && (
           <>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center pt-6 text-gray-800">
-              Orders
-            </h1>
-            <div className="w-20 sm:w-24 h-1 bg-[#E84C24] mx-auto mt-4"></div>
             <Tab2 />
           </>
         )}

@@ -30,9 +30,9 @@ const Page = () => {
 
         setUser(response.data);
       } catch (err) {
-        handleError(
-          err.response?.data?.message || err.message || "Something went wrong"
-        );
+        // handleError(
+        //   err.response?.data?.message || err.message || "Something went wrong"
+        // );
       }
     };
 
@@ -69,62 +69,63 @@ const Page = () => {
   return (
     <>
       {loading && (
-        <div
-          className="fixed top-[0] left-[0] h-[100%] w-[100%] bg-[#00000041]"
-          style={{ zIndex: 1111111111 }}
-        >
-          <div
-            className="absolute top-[50%] left-[50%] "
-            style={{ transform: "translate(-50%, -50%)" }}
-          >
-            <BounceLoader color="#dd492b" />
-          </div>
+        <div className="fixed inset-0 bg-black/40 z-[1111111111] flex items-center justify-center">
+          <BounceLoader color="#dd492b" />
         </div>
       )}
+
       <form
-        className="w-full max-w-lg mx-auto flex flex-col gap-4"
         onSubmit={handleSubmit}
+        className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-6 bg-white shadow-2xl rounded-3xl"
       >
+        <h2 className="text-center text-2xl sm:text-3xl font-bold text-[#dd492b]">
+          Update Password
+        </h2>
+
         {/* Name */}
         <div className="flex flex-col">
-          <label className="text-xl font-semibold mb-1">Name:</label>
+          <label className="text-sm sm:text-base font-medium text-gray-700 mb-1">
+            Name
+          </label>
           <input
             type="text"
-            placeholder="Enter your name"
             value={user?.name || ""}
             disabled
-            className="border p-2 outline-none rounded bg-transparent text-[gray]"
+            className="border border-gray-300 bg-gray-100 text-gray-500 p-3 rounded-md outline-none cursor-not-allowed"
           />
         </div>
 
         {/* Email */}
         <div className="flex flex-col">
-          <label className="text-xl font-semibold mb-1">Email:</label>
+          <label className="text-sm sm:text-base font-medium text-gray-700 mb-1">
+            Email
+          </label>
           <input
             type="email"
-            placeholder="Enter your email"
             value={user?.email || ""}
             disabled
-            className="border p-2 outline-none rounded bg-transparent text-[gray]"
+            className="border border-gray-300 bg-gray-100 text-gray-500 p-3 rounded-md outline-none cursor-not-allowed"
           />
         </div>
 
         {/* Password */}
         <div className="flex flex-col">
-          <label className="text-xl font-semibold mb-1">Password:</label>
+          <label className="text-sm sm:text-base font-medium text-gray-700 mb-1">
+            New Password
+          </label>
           <input
             type="password"
             placeholder="Enter new password"
-            className="border p-2 outline-none rounded bg-transparent "
-            onChange={(e) => setPassword(e.target.value)}
             value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border border-[#dd492b] p-3 rounded-md outline-none focus:ring-2 focus:ring-[#dd492b]"
           />
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-[#dd492b] hover:bg-[#bd381d] transition text-white p-2 rounded mt-4"
+          className="bg-[#dd492b] hover:bg-[#c63f22] transition-all text-white font-semibold py-3 rounded-md"
         >
           Reset Password
         </button>

@@ -35,52 +35,56 @@ const Page = () => {
   };
 
   return (
-    <div className="shadow-2xl h-full p-4 rounded-3xl">
-      {/* Products */}
-      <h1 className="text-center text-2xl font-bold mb-6">Delete Products</h1>
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 custom-scrollbar overflow-y-auto max-h-[80vh] px-2">
+    <div className="shadow-2xl min-h-full p-4 sm:p-6 rounded-3xl bg-white">
+      <h1 className="text-center text-2xl sm:text-3xl font-bold text-[#333] mb-6">
+        Delete Products
+      </h1>
+
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 overflow-y-auto max-h-[80vh] custom-scrollbar px-1 sm:px-2">
         {products.length > 0 ? (
           products.map((product) => (
             <div
               key={product._id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden w-full transition-transform hover:scale-[1.02]"
+              className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg transition duration-300 flex flex-col"
             >
               <Image
                 src={product.images[0]?.url || "/default.jpg"}
                 alt="Product"
-                height={50}
-                width={100}
-                className="w-full h-48 sm:h-56 object-cover"
+                width={400}
+                height={200}
+                className="w-full h-[180px] sm:h-[200px] object-cover rounded-t-2xl"
               />
-              <div className="p-5">
-                <h2 className="text-xl font-semibold mb-2 truncate">
+
+              <div className="p-4 flex flex-col flex-grow justify-between">
+                <h2 className="text-lg font-semibold text-gray-800 mb-2 truncate">
                   {product.title}
                 </h2>
-                <p className="text-sm text-gray-400 mb-4">
-                  <span className="font-semibold">Description:</span>{" "}
-                  {product?.description.length > 70
+
+                <p className="text-sm text-gray-600 mb-3 leading-snug">
+                  <span className="font-medium">Description:</span>{" "}
+                  {product?.description?.length > 70
                     ? `${product?.description?.slice(0, 70)}...`
                     : product.description}
                 </p>
-                <h2 className="text-lg font-semibold mb-2 truncate">
+
+                <h3 className="text-base font-semibold text-gray-700 mb-3">
                   Price:{" "}
                   <span className="text-[#dd492b]">£{product.price}</span>
-                </h2>
-                <div className="flex flex-col sm:flex-row gap-3 sm:justify-between">
-                  <button
-                    onClick={() => handleDeleteProduct(product._id)}
-                    className="cursor-pointer bg-[#dc3641] hover:bg-[#cc232d] text-white px-4 py-2 rounded text-center w-full text-sm transition"
-                  >
-                    Delete
-                  </button>
-                </div>
+                </h3>
+
+                <button
+                  onClick={() => handleDeleteProduct(product._id)}
+                  className="mt-auto bg-[#dc3545] hover:bg-[#b52d3b] text-white px-4 py-2 rounded-md text-sm font-semibold transition w-full"
+                >
+                  Delete Product
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <h3 className="text-center bg-[pink] py-4 text-gray-500">
+          <div className="col-span-full text-center py-6 text-gray-500 rounded-md">
             No products found...
-          </h3>
+          </div>
         )}
       </div>
     </div>

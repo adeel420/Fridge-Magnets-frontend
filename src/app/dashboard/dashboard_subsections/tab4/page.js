@@ -120,8 +120,12 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="shadow-2xl min-h-full p-4 rounded-3xl">
-      <h1 className="text-center text-2xl font-bold mb-6">Upload Products</h1>
+    <div className="shadow-2xl min-h-full p-6 sm:p-8 rounded-3xl bg-white">
+      <h1 className="text-center text-2xl sm:text-3xl font-bold text-[#333] mb-6">
+        Upload Products
+      </h1>
+
+      {/* Loading Spinner */}
       {loading && (
         <div className="fixed top-0 left-0 h-full w-full bg-[#00000041] z-[1111111111]">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -132,105 +136,101 @@ const Page = () => {
 
       <form
         onSubmit={handleUpload}
-        className="flex flex-col items-center gap-6 pt-8 w-full"
+        className="flex flex-col items-center gap-6 pt-4 w-full"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
-          <div>
-            <label
-              className="border p-2 hover:bg-[#dd492b] flex items-center gap-2 justify-center hover:text-white cursor-pointer rounded w-full text-center"
-              onClick={() => setShowModal(true)}
-            >
-              <CiImageOn /> Upload Images
-            </label>
-          </div>
+        {/* Image Upload Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl items-center">
+          <button
+            type="button"
+            className="border-2 border-dashed border-[#dd492b] p-4 w-full text-center text-[#dd492b] hover:bg-[#dd492b] hover:text-white rounded-lg transition flex justify-center items-center gap-2"
+            onClick={() => setShowModal(true)}
+          >
+            <CiImageOn className="text-2xl" /> Upload Product Images
+          </button>
 
-          {showModal && (
-            <div className="fixed top-0 left-0 h-full w-full bg-[#00000041] z-50">
-              <div className="absolute top-1/2 left-1/2 bg-white p-4 rounded shadow transform -translate-x-1/2 -translate-y-1/2">
-                <div className="flex flex-col">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="self-end text-2xl cursor-pointer"
-                  >
-                    &times;
-                  </button>
-
-                  <div className="flex flex-wrap gap-4">
-                    {imageInputs.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col items-center gap-2 w-fit"
-                      >
-                        <label className="text-3xl h-[60px] w-[60px] rounded-full flex items-center justify-center text-[#dd492b] border border-[#dd492b] border-dashed cursor-pointer hover:bg-[#dd492b] hover:text-white transition">
-                          +
-                          <input
-                            type="file"
-                            hidden
-                            onChange={(e) => {
-                              const updated = [...imageInputs];
-                              updated[index].file = e.target.files[0];
-                              setImageInputs(updated);
-                            }}
-                          />
-                        </label>
-
-                        {item.file && (
-                          <div className="flex flex-col items-center gap-2">
-                            <Image
-                              src={URL.createObjectURL(item.file)}
-                              height={60}
-                              width={60}
-                              className="object-cover rounded"
-                              alt={`preview-${index}`}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleDone}
-                    className="self-end bg-[red] text-white p-2 rounded cursor-pointer mt-3"
-                  >
-                    Done
-                  </button>
+          {imageData.length > 0 && (
+            <div className="grid grid-cols-3 gap-4">
+              {imageData.map((item, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <Image
+                    src={item.url}
+                    alt={`uploaded-${index}`}
+                    height={60}
+                    width={60}
+                    className="object-cover rounded shadow"
+                  />
                 </div>
-              </div>
+              ))}
             </div>
           )}
+        </div>
 
-          <div>
-            {imageData.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 w-full max-w-5xl">
-                {imageData.map((item, index) => (
-                  <div key={index} className="flex flex-col items-center gap-2">
-                    <Image
-                      src={item.url}
-                      alt={`uploaded-${index}`}
-                      height={80}
-                      width={80}
-                      className="object-cover rounded"
-                    />
+        {/* Modal for Image Selection */}
+        {showModal && (
+          <div className="fixed top-0 left-0 h-full w-full bg-[#0000006b] bg-opacity-40 z-50 flex justify-center items-center">
+            <div className="bg-white rounded-xl p-6 shadow-xl max-w-[500px] w-full relative">
+              <button
+                className="absolute top-3 right-4 text-2xl text-gray-600 hover:text-black"
+                onClick={() => setShowModal(false)}
+              >
+                &times;
+              </button>
+              <h2 className="text-lg font-semibold mb-4">
+                Upload Product Images
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                {imageInputs.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center gap-2 w-fit"
+                  >
+                    <label className="text-3xl h-[60px] w-[60px] rounded-full flex items-center justify-center text-[#dd492b] border border-[#dd492b] border-dashed cursor-pointer hover:bg-[#dd492b] hover:text-white transition">
+                      +
+                      <input
+                        type="file"
+                        hidden
+                        onChange={(e) => {
+                          const updated = [...imageInputs];
+                          updated[index].file = e.target.files[0];
+                          setImageInputs(updated);
+                        }}
+                      />
+                    </label>
+                    {item.file && (
+                      <Image
+                        src={URL.createObjectURL(item.file)}
+                        height={60}
+                        width={60}
+                        className="object-cover rounded shadow"
+                        alt={`preview-${index}`}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
-            )}
+              <button
+                type="button"
+                onClick={handleDone}
+                className="bg-[#dd492b] hover:bg-[#b9371d] text-white px-6 py-2 rounded mt-4 ml-auto block transition"
+              >
+                Done
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="grid grid-cols-1 items-center md:grid-cols-2 gap-6 w-full max-w-5xl">
+        {/* Product Info Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Select Size:</label>
+            <label className="text-sm font-medium mb-1">Select Size:</label>
             <select
               value={size}
               onChange={(e) => setSize(e.target.value)}
-              className="border p-2 outline-none rounded w-full"
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b]"
             >
               <option value="">Select a size</option>
               {sizes.map((size) => (
-                <option value={size._id} key={size._id}>
+                <option key={size._id} value={size._id}>
                   {size.size}
                 </option>
               ))}
@@ -238,65 +238,66 @@ const Page = () => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Title:</label>
+            <label className="text-sm font-medium mb-1">Title:</label>
             <input
               type="text"
-              placeholder="Write title..."
-              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter product title..."
               value={title}
-              className="border p-2 outline-none rounded w-full"
+              onChange={(e) => setTitle(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b]"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Price:</label>
+            <label className="text-sm font-medium mb-1">Price:</label>
             <input
               type="number"
-              placeholder="General price"
-              onChange={(e) => setPrice(e.target.value)}
+              placeholder="Enter price"
               value={price}
-              className="border p-2 outline-none rounded w-full"
+              onChange={(e) => setPrice(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b]"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Description:</label>
+            <label className="text-sm font-medium mb-1">Description:</label>
             <textarea
-              placeholder="Write description..."
-              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Write product description..."
               value={description}
-              className="border p-2 outline-none rounded w-full"
+              onChange={(e) => setDescription(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b] resize-none"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Minimum Order:</label>
+            <label className="text-sm font-medium mb-1">Minimum Order:</label>
             <input
-              type="text"
-              placeholder="Write in only number..."
-              onChange={(e) => setOrder(e.target.value)}
+              type="number"
+              placeholder="e.g. 10"
               value={order}
-              className="border p-2 outline-none rounded w-full"
+              onChange={(e) => setOrder(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b]"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Perfect for:</label>
+            <label className="text-sm font-medium mb-1">Perfect For:</label>
             <input
               type="text"
-              placeholder="Comma-separated values e.g. Gifts, Weddings, Birthdays"
-              onChange={(e) => setPerfectFor(e.target.value)}
+              placeholder="e.g. Gifts, Weddings, Birthdays"
               value={perfectFor}
-              className="border p-2 outline-none rounded w-full"
+              onChange={(e) => setPerfectFor(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b]"
             />
           </div>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-[#dd492b] cursor-pointer transition text-white p-2 rounded w-full max-w-[400px] mt-6"
+          className="bg-[#dd492b] hover:bg-[#b9371d] transition-all duration-200 text-white font-semibold py-3 px-6 rounded-xl w-full max-w-[300px] mt-6 shadow-md cursor-pointer"
         >
-          Upload
+          Upload Product
         </button>
       </form>
     </div>

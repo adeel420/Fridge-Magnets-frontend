@@ -50,36 +50,38 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#f8f8f8]">
       {/* Sidebar */}
-      <aside className="bg-[#dd492b] md:w-[10%] w-full md:h-screen h-auto flex md:flex-col flex-row items-center md:justify-start justify-around p-2 sticky top-0 z-10 overflow-x-auto custom-scrollbar no-scrollbar">
-        {dashboardTabs.map((data) => (
-          <div
-            key={data.id}
-            className="flex flex-col items-center m-1 cursor-pointer"
-          >
-            <button
-              onClick={() => {
-                setActiveTab(data.id);
-                if (data.id === 9) handleLogout();
-              }}
-              className={`text-xl md:text-xl p-2 rounded-full transition cursor-pointer duration-300 ${
-                activeTab === data.id
-                  ? "bg-[#ccc] text-[#dd492b]"
-                  : "text-white hover:bg-[#ccc] hover:text-[#952e75]"
-              }`}
+      <aside className="bg-[#dd492b] md:w-[12%] w-full md:h-screen h-auto flex md:flex-col flex-row md:items-center items-start justify-start md:justify-start p-3 md:py-8 sticky top-0 z-20 overflow-x-auto md:overflow-y-auto custom-scrollbar no-scrollbar shadow-md">
+        <div className="flex md:flex-col flex-row md:space-y-4 space-x-4 md:space-x-0 w-full items-center md:items-center">
+          {dashboardTabs.map((data) => (
+            <div
+              key={data.id}
+              className="flex flex-col items-center justify-center gap-1"
             >
-              <data.logo />
-            </button>
-            <span className="text-xs md:text-xs text-white text-center">
-              {data.text}
-            </span>
-          </div>
-        ))}
+              <button
+                onClick={() => {
+                  setActiveTab(data.id);
+                  if (data.id === 9) handleLogout();
+                }}
+                className={`p-3 rounded-full transition duration-300 shadow-md cursor-pointer ${
+                  activeTab === data.id
+                    ? "bg-white text-[#dd492b] scale-105"
+                    : "text-white hover:bg-white hover:text-[#952e75]"
+                }`}
+              >
+                <data.logo className="w-6 h-6" />
+              </button>
+              <span className="text-[10px] md:text-xs text-white text-center whitespace-nowrap">
+                {data.text}
+              </span>
+            </div>
+          ))}
+        </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 bg-white p-4 overflow-y-auto max-h-screen">
+      {/* Main Content */}
+      <main className="flex-1 bg-white p-4 md:p-8 overflow-y-auto max-h-screen transition-all duration-300">
         {renderTabContent()}
       </main>
     </div>

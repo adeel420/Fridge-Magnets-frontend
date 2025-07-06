@@ -10,7 +10,7 @@ const Page = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [token, setToken] = useState(null); // token initialized here
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -53,9 +53,9 @@ const Page = () => {
 
         setUser(response.data);
       } catch (err) {
-        handleError(
-          err.response?.data?.message || err.message || "Something went wrong"
-        );
+        // handleError(
+        //   err.response?.data?.message || err.message || "Something went wrong"
+        // );
       }
     };
 
@@ -63,65 +63,64 @@ const Page = () => {
   }, [token]);
 
   return (
-    <div className="shadow-2xl h-full p-4 rounded-3xl">
-      <h1 className="text-center text-2xl font-bold mb-6">Update Password</h1>
+    <div className="shadow-2xl h-full p-6 sm:p-8 rounded-3xl w-full max-w-3xl mx-auto bg-white">
+      <h1 className="text-center text-2xl sm:text-3xl font-bold text-[#dd492b] mb-8">
+        Update Password
+      </h1>
+
       {loading && (
-        <div
-          className="fixed top-[0] left-[0] h-[100%] w-[100%] bg-[#00000041]"
-          style={{ zIndex: 1111111111 }}
-        >
-          <div
-            className="absolute top-[50%] left-[50%] "
-            style={{ transform: "translate(-50%, -50%)" }}
-          >
-            <BounceLoader color="#dd492b" />
-          </div>
+        <div className="fixed top-0 left-0 h-full w-full bg-black/30 z-50 flex items-center justify-center">
+          <BounceLoader color="#dd492b" />
         </div>
       )}
-      <form
-        className="w-full max-w-lg mx-auto flex flex-col gap-4"
-        onSubmit={handleSubmit}
-      >
+
+      <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
         {/* Name */}
         <div className="flex flex-col">
-          <label className="text-xl font-semibold mb-1">Name:</label>
+          <label className="text-base sm:text-lg font-semibold mb-1">
+            Name:
+          </label>
           <input
             type="text"
             placeholder="Enter your name"
             value={user?.name || ""}
             disabled
-            className="input border p-2 outline-none rounded bg-transparent text-[gray]"
+            className="border p-3 rounded bg-gray-100 text-gray-500 cursor-not-allowed"
           />
         </div>
 
         {/* Email */}
         <div className="flex flex-col">
-          <label className="text-xl font-semibold mb-1">Email:</label>
+          <label className="text-base sm:text-lg font-semibold mb-1">
+            Email:
+          </label>
           <input
             type="email"
             placeholder="Enter your email"
             value={user?.email || ""}
             disabled
-            className="input border p-2 outline-none rounded bg-transparent text-[gray]"
+            className="border p-3 rounded bg-gray-100 text-gray-500 cursor-not-allowed"
           />
         </div>
 
         {/* Password */}
         <div className="flex flex-col">
-          <label className="text-xl font-semibold mb-1">Update Password:</label>
+          <label className="text-base sm:text-lg font-semibold mb-1">
+            New Password:
+          </label>
           <input
             type="password"
             placeholder="Enter new password"
-            className="border p-2 outline-none rounded bg-transparent "
-            onChange={(e) => setPassword(e.target.value)}
             value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-3 rounded outline-none focus:ring-2 focus:ring-[#dd492b] transition"
           />
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-[#dd492b] hover:bg-[#bd381d] transition text-white p-2 rounded mt-4"
+          className="bg-[#dd492b] hover:bg-[#bd381d] text-white py-3 rounded text-base font-semibold mt-4 transition"
         >
           Reset Password
         </button>

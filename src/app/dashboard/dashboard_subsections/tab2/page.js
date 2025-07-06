@@ -43,7 +43,7 @@ const Page = () => {
         }
       );
 
-      handleSuccess("Product uploaded successfully!");
+      handleSuccess("Events uploaded successfully!");
 
       // Reset form
       setTitle("");
@@ -60,8 +60,12 @@ const Page = () => {
   };
 
   return (
-    <div className="shadow-2xl min-h-full p-4 rounded-3xl">
-      <h1 className="text-center text-2xl font-bold mb-6">Upload Events</h1>
+    <div className="shadow-2xl min-h-full p-6 sm:p-8 rounded-3xl bg-white">
+      <h1 className="text-center text-2xl sm:text-3xl font-bold text-[#333] mb-6">
+        Upload Events
+      </h1>
+
+      {/* Loading Spinner Overlay */}
       {loading && (
         <div className="fixed top-0 left-0 h-full w-full bg-[#00000041] z-[1111111111]">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -70,82 +74,97 @@ const Page = () => {
         </div>
       )}
 
+      {/* Form */}
       <form
         onSubmit={handleUpload}
-        className="flex flex-col items-center gap-6 pt-8 w-full"
+        className="flex flex-col items-center gap-6 pt-4 w-full"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
-          <div>
-            <label className="border p-2 hover:bg-[#dd492b] flex items-center gap-2 justify-center hover:text-white cursor-pointer rounded w-full text-center">
-              <CiImageOn /> Upload Images
-              <input
-                type="file"
-                onChange={(e) => setFiles(e.target.files[0])}
-                hidden
-              />
-            </label>
-          </div>
+        {/* Image Upload + Preview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl items-center">
+          <label className="border-2 border-dashed border-[#dd492b] p-4 text-center text-[#dd492b] hover:bg-[#dd492b] hover:text-white transition-all cursor-pointer rounded-lg flex flex-col items-center justify-center gap-2">
+            <CiImageOn className="text-3xl" />
+            Upload Event Image
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFiles(e.target.files[0])}
+              hidden
+            />
+          </label>
 
           {files && (
-            <Image
-              src={URL.createObjectURL(files)}
-              alt="image-url"
-              height={60}
-              width={180}
-              className=" self-center "
-            />
+            <div className="flex justify-center">
+              <Image
+                src={URL.createObjectURL(files)}
+                alt="Uploaded"
+                height={60}
+                width={180}
+                className="rounded-xl object-cover border shadow"
+              />
+            </div>
           )}
         </div>
 
-        <div className="grid grid-cols-1 items-center md:grid-cols-2 gap-6 w-full max-w-5xl">
+        {/* Inputs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Date:</label>
+            <label className="text-sm font-semibold text-gray-700 mb-1">
+              Event Date
+            </label>
             <input
               type="date"
               onChange={(e) => setDate(e.target.value)}
               value={date}
-              className="border p-2 outline-none rounded w-full"
+              className="border border-gray-300 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#dd492b] transition"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Title:</label>
+            <label className="text-sm font-semibold text-gray-700 mb-1">
+              Event Title
+            </label>
             <input
               type="text"
-              placeholder="Write title..."
+              placeholder="Enter title..."
               onChange={(e) => setTitle(e.target.value)}
               value={title}
-              className="border p-2 outline-none rounded w-full"
+              className="border border-gray-300 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#dd492b] transition"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Address:</label>
+            <label className="text-sm font-semibold text-gray-700 mb-1">
+              Event Address
+            </label>
             <input
               type="text"
-              placeholder="London, etc..."
+              placeholder="e.g., London, UK"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="border p-2 outline-none rounded w-full"
+              className="border border-gray-300 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#dd492b] transition"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xl font-semibold mb-1">Description:</label>
+            <label className="text-sm font-semibold text-gray-700 mb-1">
+              Event Description
+            </label>
             <textarea
-              placeholder="Write description..."
+              placeholder="Describe your event..."
               onChange={(e) => setDescription(e.target.value)}
               value={description}
-              className="border p-2 outline-none rounded w-full"
+              rows={4}
+              className="border border-gray-300 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#dd492b] transition resize-none"
             />
           </div>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-[#dd492b] cursor-pointer transition text-white p-2 rounded w-full max-w-[400px] mt-6"
+          className="bg-[#dd492b] hover:bg-[#bb3f23] transition-all duration-200 text-white font-semibold py-3 px-6 rounded-xl w-full max-w-[300px] mt-4 shadow-md"
         >
-          Upload
+          Upload Event
         </button>
       </form>
     </div>

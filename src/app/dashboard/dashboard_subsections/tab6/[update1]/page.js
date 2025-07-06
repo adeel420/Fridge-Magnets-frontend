@@ -87,27 +87,35 @@ const Update1 = () => {
   };
 
   return (
-    <div className="pt-16 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+    <div className="pt-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto">
+      {/* Back Button */}
       <button
-        className="absolute right-4 top-4 sm:right-6 bg-[#dc4929] p-2 text-white rounded hover:bg-[#b8391e] text-sm sm:text-base"
+        className="absolute right-4 top-4 sm:right-6 bg-[#dc4929] px-3 py-2 text-white rounded-md hover:bg-[#b8391e] text-sm sm:text-base shadow transition"
         onClick={() => router.push("/dashboard")}
       >
         &larr; Back to dashboard
       </button>
 
-      <h1 className="text-center text-2xl sm:text-3xl font-bold mb-10">
+      {/* Heading */}
+      <h1 className="text-center text-2xl sm:text-3xl font-bold text-[#333] mb-10">
         Update Event
       </h1>
 
+      {/* Loader */}
       {loading && (
         <div className="fixed top-0 left-0 h-full w-full bg-black/30 z-50 flex items-center justify-center">
           <BounceLoader color="#dd492b" />
         </div>
       )}
 
-      <form onSubmit={handleUpload} className="flex flex-col gap-8 w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <label className="border p-3 flex items-center justify-center gap-2 rounded cursor-pointer hover:bg-[#dd492b] hover:text-white transition">
+      {/* Form */}
+      <form
+        onSubmit={handleUpload}
+        className="flex flex-col gap-8 w-full bg-white p-6 rounded-2xl shadow-md"
+      >
+        {/* Image Upload & Preview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <label className="border border-[#dd492b] text-[#dd492b] p-3 flex items-center justify-center gap-2 rounded cursor-pointer hover:bg-[#dd492b] hover:text-white transition text-base font-medium">
             <CiImageOn className="text-xl" />
             Upload Image
             <input
@@ -124,16 +132,17 @@ const Update1 = () => {
             <Image
               src={imagePreview}
               alt="Preview"
-              height={60}
-              width={180}
-              className=" object-cover rounded border mx-auto"
+              width={200}
+              height={100}
+              className="object-cover rounded border mx-auto max-h-[160px] w-auto"
             />
           )}
         </div>
 
+        {/* Fields */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col">
-            <label className="text-base sm:text-lg font-semibold mb-1">
+            <label className="text-sm sm:text-base font-semibold mb-1">
               Date:
             </label>
             <input
@@ -145,7 +154,7 @@ const Update1 = () => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-base sm:text-lg font-semibold mb-1">
+            <label className="text-sm sm:text-base font-semibold mb-1">
               Title:
             </label>
             <input
@@ -158,7 +167,7 @@ const Update1 = () => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-base sm:text-lg font-semibold mb-1">
+            <label className="text-sm sm:text-base font-semibold mb-1">
               Address:
             </label>
             <input
@@ -171,7 +180,7 @@ const Update1 = () => {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-base sm:text-lg font-semibold mb-1">
+            <label className="text-sm sm:text-base font-semibold mb-1">
               Description:
             </label>
             <textarea
@@ -183,9 +192,10 @@ const Update1 = () => {
           </div>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-[#dd492b] text-white p-3 rounded w-full max-w-[300px] mx-auto hover:bg-[#c53f26] transition"
+          className="bg-[#dd492b] hover:bg-[#c53f26] text-white font-medium text-sm sm:text-base px-6 py-3 rounded transition w-full max-w-[300px] mx-auto"
         >
           Update
         </button>
