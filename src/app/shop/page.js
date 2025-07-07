@@ -11,6 +11,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
 
   const handleGet = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/product`
@@ -18,6 +19,8 @@ const Page = () => {
       setProducts(response.data);
     } catch (err) {
       handleError(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,38 +34,44 @@ const Page = () => {
       </h1>
       <div className="w-16 sm:w-20 h-1 bg-[#dd492b] mx-auto mt-4 mb-8 rounded"></div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-        {products.map((product) => (
-          <div
-            key={product._id}
-            className="bg-white rounded-2xl shadow-md overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:border hover:border-[#dd492b] transition duration-300 cursor-pointer"
-          >
-            <Link href={`/shop/${product._id}`}>
-              {/* Image Container */}
-              <div className="h-72 sm:h-80 flex items-center justify-center bg-[#f6f6f6]">
-                <Image
-                  src={product?.images[0]?.url}
-                  alt="Product"
-                  className="object-contain w-full h-full"
-                  width={330}
-                  height={320}
-                />
-              </div>
+      {loading ? (
+        <h3 className="text-xl sm:text-2xl font-semibold text-[#dd492b] text-center mt-20 animate-pulse">
+          Products are loading...
+        </h3>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white rounded-2xl shadow-md overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:border hover:border-[#dd492b] transition duration-300 cursor-pointer"
+            >
+              <Link href={`/shop/${product._id}`}>
+                {/* Image Container */}
+                <div className="h-72 sm:h-80 flex items-center justify-center bg-[#f6f6f6]">
+                  <Image
+                    src={product?.images[0]?.url}
+                    alt="Product"
+                    className="object-contain w-full h-full"
+                    width={330}
+                    height={320}
+                  />
+                </div>
 
-              {/* Content */}
-              <div className="p-4 space-y-2">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  {product.title}
-                </h2>
-                <p className="text-sm text-gray-500">From</p>
-                <p className="text-xl sm:text-2xl font-bold text-[#dd492b]">
-                  £{product.price}
-                </p>
-              </div>
-            </Link>
-          </div>
-        ))}
-      </div>
+                {/* Content */}
+                <div className="p-4 space-y-2">
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+                    {product.title}
+                  </h2>
+                  <p className="text-sm text-gray-500">From</p>
+                  <p className="text-xl sm:text-2xl font-bold text-[#dd492b]">
+                    £{product.price}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
