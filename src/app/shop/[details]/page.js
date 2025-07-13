@@ -160,16 +160,12 @@ const Details = () => {
   };
 
   const handleSubmitAndAddToCart = async () => {
-    // if (!token)
-    //   return handleError(
-    //     "Please create an account before adding items to your cart."
-    //   );
     if (imageData.length !== Number(product?.orders)) {
       return handleError(`You must upload exactly ${product.orders} images.`);
     }
     let cartId = localStorage.getItem("cartId");
     if (!cartId) {
-      cartId = crypto.randomUUID(); // or use `uuid` package
+      cartId = crypto.randomUUID();
       localStorage.setItem("cartId", cartId);
     }
 
