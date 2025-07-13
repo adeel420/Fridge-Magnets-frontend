@@ -22,7 +22,8 @@ const Page = () => {
 
   const handleLogin = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (!token) return;
 
       const response = await axios.get(
@@ -40,7 +41,8 @@ const Page = () => {
   };
 
   const handleGetCart = async () => {
-    const cartId = localStorage.getItem("cartId");
+    const cartId =
+      typeof window !== "undefined" ? localStorage.getItem("cartId") : null;
     if (!cartId) return;
 
     try {
@@ -74,7 +76,8 @@ const Page = () => {
     }
   };
 
-  const token = localStorage.getItem("token");
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const handleApplyCoupon = () => {
     const token =
