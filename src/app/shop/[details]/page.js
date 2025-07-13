@@ -8,6 +8,7 @@ import { handleError, handleSuccess } from "@/app/utils";
 import axios from "axios";
 import Image from "next/image";
 import { BounceLoader } from "react-spinners";
+import { v4 as uuidv4 } from "uuid";
 
 const Details = () => {
   const [selectedImg, setSelectedImg] = useState(null);
@@ -163,9 +164,21 @@ const Details = () => {
     if (imageData.length !== Number(product?.orders)) {
       return handleError(`You must upload exactly ${product.orders} images.`);
     }
+    function generateUUID() {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }
+      );
+    }
+
+    // Usage
     let cartId = localStorage.getItem("cartId");
     if (!cartId) {
-      cartId = crypto.randomUUID();
+      cartId = generateUUID();
       localStorage.setItem("cartId", cartId);
     }
 
