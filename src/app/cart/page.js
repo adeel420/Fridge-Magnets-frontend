@@ -8,12 +8,13 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "@/components/CheckoutForm";
 import axios from "axios";
 import Image from "next/image";
+import { Button, Modal } from "antd";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const Page = () => {
-  const [cart, setCart] = useState([]);
-  const [user, setUser] = useState("");
+  const [cart, setCart] = useState({ products: [] });
+  const [user, setUser] = useState({});
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [userEmail, setUserName] = useState("");
@@ -22,17 +23,12 @@ const Page = () => {
   const handleLogin = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        console.warn("Token not found");
-        return;
-      }
+      if (!token) return;
 
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/user/`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
@@ -43,104 +39,85 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    handleLogin();
-  }, []);
+  const handleGetCart = async () => {
+    const cartId = localStorage.getItem("cartId");
+    if (!cartId) return;
 
-  const total =
-    cart.length > 0
-      ? cart[0].products.reduce(
-          (acc, item) => acc + item.product.price * item.quantity,
-          0
-        )
-      : 0;
-
-  const originalTotal =
-    cart.length > 0
-      ? cart[0].products.reduce(
-          (acc, item) => acc + item.product.price * item.quantity,
-          0
-        )
-      : 0;
-
-  const discountedTotal = originalTotal - (originalTotal * discount) / 100;
-
-  const handleApplyCoupon = async (e) => {
-    if (!couponCode) {
-      return handleError("Please enter the code.");
-    }
-
-    const formattedCode = couponCode.trim().toUpperCase();
-    const hasUsedCoupon = previousBuyers.includes(userEmail);
-    if (hasUsedCoupon) {
-      return handleError("Coupon already used by this user.");
-    }
-
-    if (formattedCode !== "WELCOME10") {
-      return handleError("Please enter the correct coupon code.");
-    }
-
-    setDiscount(10);
-    handleSuccess("Coupon applied: 10% off!");
-  };
-
-  // get orders by user
-  const handleGetById = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/cart/${user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/${cartId}`
       );
       setCart(response.data);
-    } catch (err) {}
+    } catch (err) {
+      console.error("Fetch cart failed", err);
+    }
   };
 
-  useEffect(() => {
-    if (user.id) {
-      handleGetById();
-    }
-  }, [user.id]);
-
-  useEffect(() => {
-    const handleGet = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/${user.id}`
-        );
-        const buyerEmails = response.data.map((order) => order.buyer.email);
-        setPreviousBuyers(buyerEmails);
-      } catch (err) {}
-    };
-
-    if (user.id) {
-      handleGet();
-    }
-  }, [user.id]);
-
-  const handleDeleteAll = async (userId) => {
+  const handleRemove = async (itemId) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/cart/user/${user.id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/cart/${itemId}`);
+      handleSuccess("Item deleted successfully");
+      handleGetCart();
+    } catch (err) {
+      handleError(err);
+    }
+  };
 
-      setCart([]);
+  const handleDeleteAll = async () => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/user/${user.id}`
+      );
+      setCart({ products: [] });
     } catch (err) {
       console.error("Delete all error:", err);
     }
   };
 
-  const handleRemove = async (id) => {
-    try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/cart/${id}`);
-      handleSuccess("Item deleted successfully");
-      handleGetById();
-    } catch (err) {
-      handleError(err);
+  const token = localStorage.getItem("token");
+
+  const handleApplyCoupon = () => {
+    if (!token) {
+      return handleError("Please first login the account for applying coupon");
     }
+    if (!couponCode) return handleError("Please enter the code.");
+    const formattedCode = couponCode.trim().toUpperCase();
+    const hasUsedCoupon = previousBuyers.includes(userEmail);
+
+    if (hasUsedCoupon) return handleError("Coupon already used by this user.");
+    if (formattedCode !== "WELCOME10")
+      return handleError("Please enter the correct coupon code.");
+
+    setDiscount(10);
+    handleSuccess("Coupon applied: 10% off!");
   };
+
+  useEffect(() => {
+    handleLogin();
+    handleGetCart();
+  }, []);
+
+  useEffect(() => {
+    const fetchPreviousBuyers = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/${user.id}`
+        );
+        const emails = res.data.map((order) => order.buyer.email);
+        setPreviousBuyers(emails);
+      } catch (err) {
+        console.log("Payment history error:", err);
+      }
+    };
+
+    if (user.id) fetchPreviousBuyers();
+  }, [user.id]);
+
+  const originalTotal = cart.products.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0
+  );
+  const discountedTotal = originalTotal - (originalTotal * discount) / 100;
 
   return (
     <div className="pt-42 px-4 sm:px-6 lg:px-8 pb-20 max-w-7xl mx-auto">
@@ -148,7 +125,7 @@ const Page = () => {
         My Cart
       </h1>
 
-      {cart.length === 0 ? (
+      {cart.products.length === 0 ? (
         <p className="text-center border border-dashed border-[#dd492b] text-[#dd492b] p-4 rounded">
           Your cart is empty...
         </p>
@@ -162,8 +139,9 @@ const Page = () => {
             <div>Price</div>
             <div>Remove</div>
           </div>
+
           {/* Cart Items */}
-          {cart[0]?.products?.map((item) => (
+          {cart.products.map((item) => (
             <div
               key={item._id}
               className="grid grid-cols-1 md:grid-cols-6 items-center border border-dashed border-[#dd492b] rounded p-4 gap-4"
@@ -182,21 +160,11 @@ const Page = () => {
                 ))}
               </div>
 
-              {/* Title */}
-              <div className="text-sm font-semibold">
-                {item?.product?.title}
-              </div>
-
-              {/* Size */}
+              <div className="text-sm font-semibold">{item.product.title}</div>
               <div className="text-sm font-medium">{item?.size?.size}</div>
-
-              {/* Price */}
               <div className="text-right sm:text-left font-bold text-lg">
-                <span className="text-[#dd492b]">£ {item?.product?.price}</span>
+                <span className="text-[#dd492b]">£ {item.product.price}</span>
               </div>
-              {/* Price */}
-
-              {/* Remove Button */}
               <div>
                 <button
                   onClick={() => handleRemove(item._id)}
@@ -207,13 +175,13 @@ const Page = () => {
               </div>
             </div>
           ))}
+
           {/* Coupon Section */}
-          <div className="flex items-end justify-end ">
+          <div className="flex items-end justify-end">
             <div className="mt-6 p-6 border border-[#dd492b] w-full max-w-[450px] rounded-xl bg-white shadow-md space-y-4">
               <h2 className="text-xl font-semibold text-[#dd492b]">
                 🎁 Apply Coupon
               </h2>
-
               <p className="text-sm text-gray-700">
                 <span className="font-medium text-[#dd492b]">10% off</span> your
                 first order! Use code:{" "}
@@ -224,10 +192,9 @@ const Page = () => {
                 <input
                   type="text"
                   value={couponCode}
-                  onChange={(e) => {
-                    const value = e.target.value.toUpperCase();
-                    if (value.length <= 9) setCouponCode(value);
-                  }}
+                  onChange={(e) =>
+                    setCouponCode(e.target.value.toUpperCase().slice(0, 9))
+                  }
                   placeholder="Enter coupon code"
                   className={`w-full sm:w-72 px-4 py-2 border ${
                     couponCode && couponCode !== "WELCOME10"
@@ -249,6 +216,7 @@ const Page = () => {
               </div>
             </div>
           </div>
+
           {/* Total & Payment */}
           <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div className="text-right sm:text-left font-bold text-lg">
@@ -261,19 +229,17 @@ const Page = () => {
                     </span>
                   </p>
                   <p>
-                    Discount ({discount}%): -£{" "}
+                    Discount ({discount}%): -£
                     {((originalTotal * discount) / 100).toFixed(2)}
                   </p>
-                  <p>
-                    <span className="text-[#dd492b]">
-                      Total: £ {discountedTotal.toFixed(2)}
-                    </span>
+                  <p className="text-[#dd492b]">
+                    Total: £ {discountedTotal.toFixed(2)}
                   </p>
                 </>
               ) : (
-                <span className="text-[#dd492b]">
+                <p className="text-[#dd492b]">
                   Total: £ {originalTotal.toFixed(2)}
-                </span>
+                </p>
               )}
             </div>
             <div className="w-full sm:max-w-md">

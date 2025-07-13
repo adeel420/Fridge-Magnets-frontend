@@ -160,12 +160,17 @@ const Details = () => {
   };
 
   const handleSubmitAndAddToCart = async () => {
-    if (!token)
-      return handleError(
-        "Please create an account before adding items to your cart."
-      );
+    // if (!token)
+    //   return handleError(
+    //     "Please create an account before adding items to your cart."
+    //   );
     if (imageData.length !== Number(product?.orders)) {
       return handleError(`You must upload exactly ${product.orders} images.`);
+    }
+    let cartId = localStorage.getItem("cartId");
+    if (!cartId) {
+      cartId = crypto.randomUUID(); // or use `uuid` package
+      localStorage.setItem("cartId", cartId);
     }
 
     const formData = new FormData();
@@ -185,21 +190,18 @@ const Details = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
           },
         }
       );
       const uploadedImageDocId = res.data?._id;
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/cart/`,
-        {
-          productId: res.data.product,
-          uploadedImageId: uploadedImageDocId,
-          sizeId: size,
-          quantity: 1,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/cart/`, {
+        cartId,
+        productId: res.data.product,
+        uploadedImageId: uploadedImageDocId,
+        sizeId: size,
+        quantity: 1,
+      });
 
       handleSuccess("All items added to cart!");
       setImageData([]);

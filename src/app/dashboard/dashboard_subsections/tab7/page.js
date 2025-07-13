@@ -113,7 +113,7 @@ const Page = () => {
                     key={order._id}
                   >
                     <td className="p-3 font-bold text-gray-700">{index + 1}</td>
-                    <td className="p-3">{order?.buyer?.name || "N/A"}</td>
+                    <td className="p-3">{order?.name || "N/A"}</td>
                     <td className="p-3">{order?.phone || "N/A"}</td>
                     <td className="p-3">{order?.address || "N/A"}</td>
                     <td className="p-3">

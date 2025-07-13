@@ -6,6 +6,7 @@ import axios from "axios";
 import { handleError, handleSuccess } from "@/app/utils";
 import { BounceLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
+import { Modal } from "antd";
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -14,9 +15,7 @@ const CARD_ELEMENT_OPTIONS = {
       fontSize: "16px",
       fontSmoothing: "antialiased",
       fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-      "::placeholder": {
-        color: "#a0aec0",
-      },
+      "::placeholder": { color: "#a0aec0" },
     },
     invalid: {
       color: "#e53e3e",
@@ -29,106 +28,101 @@ const CARD_ELEMENT_OPTIONS = {
 const CheckoutForm = ({ amount, handleDeleteAll }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
+
   const [clientSecret, setClientSecret] = useState("");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [proceedAsGuest, setProceedAsGuest] = useState(false);
+  const [modalText] = useState(
+    "Are you sure you want to checkout without creating an account?"
+  );
 
-  const router = useRouter();
-
-  // Fetch user from token
-  const handleLogin = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setUser(response.data);
-    } catch (err) {
-      console.error("Login fetch failed:", err);
-    }
+  const showModal = () => setOpen(true);
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setProceedAsGuest(true);
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 1000);
   };
+  const handleCancel = () => setOpen(false);
 
-  // Fetch client secret from backend
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/user/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setUser(res.data))
+      .catch((err) => console.error("Login fetch failed:", err));
+  }, []);
+
   useEffect(() => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/payment/create-payment-intent`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
       }
     )
       .then((res) => res.json())
-      .then((data) => {
-        if (data.clientSecret) {
-          setClientSecret(data.clientSecret);
-        } else {
-          // handleError("Failed to get clientSecret.");
-        }
-      })
-      .catch((err) => {
-        console.error("Error creating payment intent:", err);
-      });
+      .then((data) => data.clientSecret && setClientSecret(data.clientSecret))
+      .catch((err) => console.error("Error creating payment intent:", err));
   }, [amount]);
 
   useEffect(() => {
-    handleLogin();
-  }, []);
+    if (proceedAsGuest) handleSubmit();
+  }, [proceedAsGuest]);
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!stripe || !elements || !clientSecret || !phone || !address) return;
-
+  const handleSubmit = async () => {
+    if (
+      !stripe ||
+      !elements ||
+      !clientSecret ||
+      !phone ||
+      !address ||
+      (!user && (!name || !email))
+    )
+      return;
     setLoading(true);
+
     try {
       const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
+        payment_method: { card: elements.getElement(CardElement) },
       });
 
-      if (result.error) {
-        handleError(`Payment failed: ${result.error.message}`);
-        return;
-      }
+      if (result.error)
+        return handleError(`Payment failed: ${result.error.message}`);
 
       if (result.paymentIntent.status === "succeeded") {
-        if (!user || !user.id) {
-          handleError("User not found or not logged in.");
-          return;
+        let cartItems = [];
+        if (user?.id) {
+          const cartRes = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/cart/${user.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          cartItems = cartRes.data[0]?.products || [];
         }
-
-        const cartResponse = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/cart/${user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        const cartItems = cartResponse.data[0]?.products || [];
 
         const products = cartItems.map((item) => ({
           product: item.product,
           size: item.sizeId || item.size || null,
           images: item.uploadedImages?.images?.map((img) => img.url) || [],
         }));
-
-        // products.forEach((p, index) => console.log(`Product ${index + 1}:`, p));
 
         const orderData = {
           products,
@@ -137,34 +131,30 @@ const CheckoutForm = ({ amount, handleDeleteAll }) => {
             amount: result.paymentIntent.amount,
             status: result.paymentIntent.status,
           },
-          buyer: user.id,
+          buyer: user?.id || null,
+          name,
+          email,
           phone,
           address,
           status: "processing",
           sizeId: products[0]?.size || null,
         };
 
-        // Save order to backend
-        const orderResponse = await fetch(
+        const orderRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/payment`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(orderData),
           }
         );
 
-        const orderDataResponse = await orderResponse.json();
+        const orderResJson = await orderRes.json();
+        if (!orderRes.ok)
+          return handleError(orderResJson.error || "Failed to save order.");
 
-        if (!orderResponse.ok) {
-          handleError(
-            orderDataResponse.error || "Failed to save order. Please try again."
-          );
-          return;
-        }
-        await handleDeleteAll(user.id);
+        if (user?.id) await handleDeleteAll(user.id);
+
         handleSuccess("✅ Payment successful!");
         router.push("/my-account");
       }
@@ -178,7 +168,12 @@ const CheckoutForm = ({ amount, handleDeleteAll }) => {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+        if (!token) return showModal();
+        handleSubmit();
+      }}
       className="max-w-md mx-auto space-y-4 border-2 p-4 rounded"
     >
       {loading && (
@@ -197,13 +192,28 @@ const CheckoutForm = ({ amount, handleDeleteAll }) => {
 
       <input
         type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        className="w-full border px-3 py-2 rounded"
+      />
+      <input
+        type="email"
+        placeholder="email@example.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full border px-3 py-2 rounded"
+      />
+      <input
+        type="text"
         placeholder="Phone Number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         required
         className="w-full border px-3 py-2 rounded"
       />
-
       <input
         type="text"
         placeholder="Shipping Address"
@@ -226,6 +236,15 @@ const CheckoutForm = ({ amount, handleDeleteAll }) => {
           Pay Now
         </button>
       </div>
+
+      <Modal
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p className="mt-8">{modalText}</p>
+      </Modal>
     </form>
   );
 };
