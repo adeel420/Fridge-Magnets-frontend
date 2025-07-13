@@ -1,5 +1,6 @@
 "use client";
 
+export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { IoTrash } from "react-icons/io5";
 import { handleError, handleSuccess } from "@/app/utils";
@@ -9,7 +10,6 @@ import CheckoutForm from "@/components/CheckoutForm";
 import axios from "axios";
 import Image from "next/image";
 import { Button, Modal } from "antd";
-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const Page = () => {
@@ -77,6 +77,8 @@ const Page = () => {
   const token = localStorage.getItem("token");
 
   const handleApplyCoupon = () => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) {
       return handleError("Please first login the account for applying coupon");
     }
