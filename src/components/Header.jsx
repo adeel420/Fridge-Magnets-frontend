@@ -12,12 +12,14 @@ import { handleError, handleSuccess } from "@/app/utils";
 import { Popover } from "antd";
 import axios from "axios";
 import { BounceLoader } from "react-spinners";
+// import { assets } from "./assets/assets";
 
 const navLinks = [
   { label: "Home", path: "/" },
   { label: "Shop", path: "/shop" },
-  { label: "About", path: "/about" },
   { label: "Event", path: "/event-section" },
+  { label: "About", path: "/about" },
+  { label: "Faqs", path: "/faqs" },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -54,7 +56,7 @@ const Header = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       setUser(response.data);
     } catch (err) {
@@ -94,7 +96,7 @@ const Header = () => {
   );
 
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <header className="bg-white  fixed top-0 left-0 w-full z-50">
       {loading && (
         <div
           className="fixed top-0 left-0 h-full w-full bg-[#00000041]"
@@ -110,10 +112,10 @@ const Header = () => {
       )}
 
       {/* Top Strip */}
-      <div className="bg-[#dd492b] text-white flex justify-end">
+      <div className="text-[#dd492b] bg-white flex justify-end">
         <div className="flex items-center border-r">
           <button
-            className="flex items-center gap-2 p-3 cursor-pointer text-sm w-[120px] justify-center hover:bg-[white] hover:text-[#dd492b]"
+            className="flex items-center gap-2 p-3 cursor-pointer text-sm w-[120px] justify-center hover:text-[white] hover:bg-[#dd492b]"
             onClick={() => handleNavigate("/my-account")}
           >
             <FaUser /> My Account
@@ -121,7 +123,7 @@ const Header = () => {
         </div>
         <div className="flex items-center border-r">
           <button
-            className="flex items-center gap-2 cursor-pointer p-5 text-sm w-[120px] justify-center hover:bg-[white] hover:text-[#dd492b]"
+            className="flex items-center gap-2 cursor-pointer p-5 text-sm w-[120px] justify-center hover:text-[white] hover:bg-[#dd492b]"
             onClick={() => handleNavigate("/cart")}
           >
             <FaCartShopping /> My Cart
@@ -130,23 +132,23 @@ const Header = () => {
       </div>
 
       {/* Main Header */}
-      <div className="max-w-7xl h-[100px] mx-auto flex items-center justify-between px-4 py-3">
+      <div className="max-w-7xl h-[100px] mx-auto bg-[#dd492b] flex items-center justify-between px-4 py-3">
         <button
           onClick={() => handleNavigate("/")}
           className="flex items-center"
         >
           <Image
-            src="https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951125/logo_dzwpsi.png"
+            src={`https://res.cloudinary.com/dyyuwwbaq/image/upload/v1768758842/Screenshot_2026-01-18_225138-removebg-preview_1_jt80fp.png`}
             alt="Logo"
             width={250}
-            height={250}
-            className="h-[250px] w-[250px]"
+            height={50}
+            className="h-[50px] w-[250px]"
             priority
           />
         </button>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-6 font-medium text-gray-700">
+        <nav className="hidden md:flex gap-6 font-medium text-white">
           {navLinks.map((link) => (
             <button
               key={link.path}
@@ -162,7 +164,7 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-4 pr-11">
           {token ? (
             <Popover content={content} trigger="click">
-              <div className="cursor-pointer text-white text-[22px] bg-[#dd492b] border border-white rounded-full p-2 h-[60px] w-[60px] flex items-center justify-center ">
+              <div className="cursor-pointer text-white text-[22px] text-[#dd492b] bg-white border border-white rounded-full p-2 h-[60px] w-[60px] flex items-center justify-center ">
                 {user?.name?.charAt(0)}
               </div>
             </Popover>
@@ -170,13 +172,13 @@ const Header = () => {
             <>
               <button
                 onClick={() => handleNavigate("/auth/signin")}
-                className="text-[#dd492b] font-medium cursor-pointer"
+                className="text-[white] font-medium cursor-pointer"
               >
                 Sign In
               </button>
               <button
                 onClick={() => handleNavigate("/auth/signup")}
-                className="bg-[#dd492b] text-white px-4 py-2 rounded hover:bg-[#ab331b] transition cursor-pointer"
+                className="text-[#dd492b] bg-white px-4 py-2 rounded hover:bg-[transparent] hover:text-white hover:border-white hover:border transition cursor-pointer"
               >
                 Sign Up
               </button>

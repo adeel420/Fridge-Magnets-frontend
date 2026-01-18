@@ -21,7 +21,7 @@ const Footer = () => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/subscribe/`,
-        { email: input }
+        { email: input },
       );
       handleSuccess("Subscribed successfully!");
       setInput("");
@@ -65,7 +65,7 @@ const Footer = () => {
                   info@photofy.co.uk
                 </a>
               </li>
-              <li className="flex items-center gap-2">
+              {/* <li className="flex items-center gap-2">
                 <Phone size={18} className="text-gray-300" />
                 <a
                   href="tel:+1234567890"
@@ -73,7 +73,7 @@ const Footer = () => {
                 >
                   075-XXXXXXXX
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -86,7 +86,7 @@ const Footer = () => {
               <a
                 onClick={() =>
                   router.push(
-                    "https://www.instagram.com/photofyofficial?igsh=MnJncGw3cmN1NGpl"
+                    "https://www.instagram.com/photofyofficial?igsh=MnJncGw3cmN1NGpl",
                   )
                 }
                 target="_blank"
@@ -97,7 +97,7 @@ const Footer = () => {
               <a
                 onClick={() =>
                   router.push(
-                    "https://www.tiktok.com/@photofyofficial?_t=ZN-8wZmg0tjOLO&_r=1"
+                    "https://www.tiktok.com/@photofyofficial?_t=ZN-8wZmg0tjOLO&_r=1",
                   )
                 }
                 target="_blank"

@@ -1,15 +1,8 @@
 "use client";
 import Image from "next/image";
 import { Camera, Heart, Users, Award } from "lucide-react";
-import { useState } from "react";
-import { FAQs } from "@/components/data/data";
 
 const Page = () => {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const toggleAccordion = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
   return (
     <div className="pt-36 px-4 max-w-7xl mx-auto">
       {/* Header Section */}
@@ -106,49 +99,6 @@ const Page = () => {
               </p>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* FAQ */}
-      <div className="max-w-3xl mx-auto px-4 py-8" id="faqs">
-        <h2 className="text-3xl font-bold mb-2 text-center">FAQS</h2>
-        <div className="w-24 h-1 bg-[#E84C24] mx-auto "></div>
-        <div className="space-y-4 mt-12">
-          {FAQs.map((item, index) => (
-            <div
-              key={index}
-              className="border border-gray-200 rounded-lg overflow-hidden"
-            >
-              <button
-                onClick={() => toggleAccordion(index)}
-                className="w-full flex justify-between items-center bg-[#f24b1a] text-white px-4 py-3 text-left focus:outline-none"
-              >
-                <span className="text-lg font-medium">{item.title}</span>
-                <svg
-                  className={`w-5 h-5 transition-transform duration-300 ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-
-              {openIndex === index && (
-                <div
-                  className="px-4 py-3 bg-white text-gray-700"
-                  dangerouslySetInnerHTML={{ __html: item.content }}
-                />
-              )}
-            </div>
-          ))}
         </div>
       </div>
     </div>

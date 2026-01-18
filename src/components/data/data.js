@@ -153,11 +153,11 @@ export const FAQs = [
     content:
       "• Processing time: 1 Day <br/> • Delivery time: 3–5 business days after shipping <br/> <b>Please note that during peak holiday seasons, production times may vary slightly.</b>",
   },
-  {
-    title: "How much is shipping?",
-    content:
-      "When order is above £30,00 will the shipping automatically come up as free.",
-  },
+  // {
+  //   title: "How much is shipping?",
+  //   content:
+  //     "When order is above £30,00 will the shipping automatically come up as free.",
+  // },
   {
     title: "Do you ship internationally?",
     content: "Currently, we do not offer international shipping.",

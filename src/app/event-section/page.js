@@ -48,7 +48,7 @@ const Page = () => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/subscribe/`,
-        { email: input }
+        { email: input },
       );
       handleSuccess("Subscribed successfully!");
       setInput("");
@@ -62,7 +62,7 @@ const Page = () => {
   const getEvents = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/events`
+        `${process.env.NEXT_PUBLIC_API_URL}/events`,
       );
       setEvents(response.data);
     } catch (err) {
@@ -296,9 +296,13 @@ const Page = () => {
       </div>
 
       {/* Packages Section */}
-      <div className="bg-[#fff3f0] rounded-2xl p-8 md:p-12 mb-20" id="event">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
+      <div
+        className="bg-[#fff3f0] flex items-center justify-center rounded-2xl p-8 md:p-12 mb-20"
+        id="event"
+      >
+        <div className="flex items-center justify-center  gap-12">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-12"> */}
+          {/* <div>
             <h2 className="text-3xl font-bold mb-4">Events Package</h2>
             <div className="w-24 h-1 bg-[#e84118] mb-6"></div>
 
@@ -382,7 +386,7 @@ const Page = () => {
                 </span>
               </p>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col justify-center">
             <div className="bg-white rounded-xl shadow-md p-8">

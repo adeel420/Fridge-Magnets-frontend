@@ -36,7 +36,7 @@ const Page = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formState),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -52,7 +52,7 @@ const Page = () => {
       }, 3000);
     } catch (error) {
       handleError(
-        "Sorry, there was an error sending your message. Please try again later."
+        "Sorry, there was an error sending your message. Please try again later.",
       );
     } finally {
       setLoading(false);
@@ -100,12 +100,12 @@ const Page = () => {
                 value="info@photofy.co.uk"
                 href="mailto:info@photofy.co.uk"
               />
-              <InfoRow
+              {/* <InfoRow
                 icon={Phone}
                 label="Phone"
                 value="075-XXXXXXXX"
                 href="tel:075-XXXXXXXX"
-              />
+              /> */}
               <div className="flex items-start">
                 <Clock className="text-[#dd492b] mt-1 mr-4" size={22} />
                 <div>

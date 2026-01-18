@@ -19,7 +19,7 @@ export default function Home() {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/subscribe/`,
-        { email: input }
+        { email: input },
       );
       handleSuccess("Subscribed successfully!");
       setInput("");
@@ -32,7 +32,7 @@ export default function Home() {
   return (
     <>
       {/* Fixed */}
-      <div className="fixed top-[160px] bg-[#dd492b] w-full text-white z-40">
+      <div className="fixed top-[160px] bg-[#fde1d3] w-full text-[#dd492b] z-40">
         <div className="flex items-center justify-center h-12 sm:h-14">
           <marquee className="text-sm sm:text-base">
             FREE SHIPPING FOR ORDERS ABOVE £30.00
@@ -60,12 +60,12 @@ export default function Home() {
           {/* Text */}
           <div className="w-full md:w-1/2 flex flex-col gap-4 items-start justify-center text-center md:text-left">
             <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-[#dd492b] leading-tight">
-              Turn Your Favorite Moments Into Personalised Magnets
+              Turn Your Favourite Magnets Into Personalised Magnets
             </h1>
             <p className="text-gray-800 text-base sm:text-lg">
-              From heartfelt gifts to memorable keepsakes — create custom
-              magnets in 4 unique sizes. Order online or have us live at your
-              special events to create lasting memories
+              Personalised magnets made simple – Available in multiple different
+              designs. Perfect for gifts, keepsakes and live event expensive
+              where guests can take home memories instantly.
             </p>
             <button
               onClick={() => router.push("/shop")}
@@ -89,7 +89,7 @@ export default function Home() {
         </div>
 
         {/* Our Story */}
-        <section className="mt-32 max-w-4xl mx-auto px-4 text-center">
+        {/* <section className="mt-32 max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
             Our Story
           </h1>
@@ -100,7 +100,7 @@ export default function Home() {
             unique approach combines creativity with memorable experiences,
             making every occasion special.
           </p>
-        </section>
+        </section> */}
 
         {/* How It Works Section */}
         <section className="mt-32 max-w-7xl mx-auto px-4">
@@ -114,14 +114,30 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             {/* Step 1 */}
+            <div className="flex flex-col items-center text-center p-6 rounded-xl border border-gray-200 transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white">
+              <div className="w-16 h-16 rounded-full bg-[#fde2d4] flex items-center justify-center mb-4">
+                <Maximize className="h-8 w-8 text-[#E84C24]" />
+              </div>
+              <div className="bg-[#E84C24] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg mb-3">
+                1
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Choose a Design from our magnet selection
+              </h3>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Choose from our 4 unique magnet sizes
+              </p>
+            </div>
+
+            {/* Step 2 */}
             <div className="flex flex-col items-center text-center p-6 rounded-xl border border-gray-200 transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white">
               <div className="w-16 h-16 rounded-full bg-[#fde2d4] flex items-center justify-center mb-4">
                 <FiUpload className="h-8 w-8 text-[#E84C24]" />
               </div>
               <div className="bg-[#E84C24] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg mb-3">
-                1
+                2
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 Upload Your Photo
@@ -131,24 +147,8 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Step 2 */}
-            <div className="flex flex-col items-center text-center p-6 rounded-xl border border-gray-200 transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white">
-              <div className="w-16 h-16 rounded-full bg-[#fde2d4] flex items-center justify-center mb-4">
-                <Maximize className="h-8 w-8 text-[#E84C24]" />
-              </div>
-              <div className="bg-[#E84C24] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg mb-3">
-                2
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                Choose a Size
-              </h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Choose from our 4 unique magnet sizes
-              </p>
-            </div>
-
             {/* Step 3 */}
-            <div className="flex flex-col items-center text-center p-6 rounded-xl border border-gray-200 transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white">
+            {/* <div className="flex flex-col items-center text-center p-6 rounded-xl border border-gray-200 transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white">
               <div className="w-16 h-16 rounded-full bg-[#fde2d4] flex items-center justify-center mb-4">
                 <Pencil className="h-8 w-8 text-[#E84C24]" />
               </div>
@@ -161,7 +161,7 @@ export default function Home() {
               <p className="text-gray-600 text-sm sm:text-base">
                 Customise with text, filters, or special effects
               </p>
-            </div>
+            </div> */}
 
             {/* Step 4 */}
             <div className="flex flex-col items-center text-center p-6 rounded-xl border border-gray-200 transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white">
