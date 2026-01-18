@@ -1,14 +1,14 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { FAQs } from "@/components/data/data";
 
-const page = () => {
+const Page = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
   return (
     <div className="pt-36 px-4 max-w-7xl mx-auto">
       {/* FAQ */}
@@ -64,4 +64,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
