@@ -27,7 +27,9 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [token, setToken] = useState("");
   const [user, setUser] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [showShopDropdown, setShowShopDropdown] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -45,6 +47,21 @@ const Header = () => {
   useEffect(() => {
     setLoading(false);
   }, [pathname]);
+
+  const handleGetCategories = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/category/`,
+      );
+      setCategories(response.data || []);
+    } catch (err) {
+      console.error("Failed to fetch categories");
+    }
+  };
+
+  useEffect(() => {
+    handleGetCategories();
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -74,6 +91,8 @@ const Header = () => {
   const handleNavigate = (path) => {
     setLoading(true);
     router.push(path);
+    // Reset loading after a short delay to prevent interference
+    setTimeout(() => setLoading(false), 100);
   };
 
   const content = (
@@ -149,22 +168,77 @@ const Header = () => {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex gap-6 font-medium text-white">
-          {navLinks.map((link) => (
-            <button
-              key={link.path}
-              onClick={() => handleNavigate(link.path)}
-              className="hover:text-[#ab331b] transition-colors cursor-pointer"
-            >
-              {link.label}
-            </button>
-          ))}
+          {navLinks.map((link) => {
+            if (link.label === "Shop") {
+              return (
+                <div
+                  key={link.path}
+                  className="relative"
+                  onMouseEnter={() => setShowShopDropdown(true)}
+                  onMouseLeave={() => setShowShopDropdown(false)}
+                >
+                  <button
+                    onClick={() => handleNavigate(link.path)}
+                    className="hover:text-[#ab331b] transition-colors cursor-pointer"
+                  >
+                    {link.label}
+                  </button>
+                  {showShopDropdown && (
+                    <div className="absolute top-full left-0 bg-white shadow-2xl rounded-xl py-3 min-w-[250px] z-50 border border-gray-100 transform transition-all duration-300 ease-out">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wide">Shop Categories</h3>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setShowShopDropdown(false);
+                          handleNavigate("/shop");
+                        }}
+                        className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-[#dd492b] hover:to-[#b9371d] hover:text-white transition-all duration-200 group"
+                      >
+                        <div className="w-2 h-2 bg-[#dd492b] rounded-full mr-3 group-hover:bg-white"></div>
+                        <span className="font-medium">All Products</span>
+                      </button>
+                      {categories.map((category, index) => (
+                        <button
+                          key={category._id}
+                          onClick={() => {
+                            setShowShopDropdown(false);
+                            handleNavigate(`/shop?category=${category._id}`);
+                          }}
+                          className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-[#dd492b] hover:to-[#b9371d] hover:text-white transition-all duration-200 group"
+                          style={{ animationDelay: `${index * 50}ms` }}
+                        >
+                          <div className="w-2 h-2 bg-gray-400 rounded-full mr-3 group-hover:bg-white transition-colors"></div>
+                          <span className="font-medium">{category.name}</span>
+                          <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            return (
+              <button
+                key={link.path}
+                onClick={() => handleNavigate(link.path)}
+                className="hover:text-[#ab331b] transition-colors cursor-pointer"
+              >
+                {link.label}
+              </button>
+            );
+          })}
         </nav>
 
         {/* Auth */}
         <div className="hidden md:flex items-center gap-4 pr-11">
           {token ? (
             <Popover content={content} trigger="click">
-              <div className="cursor-pointer text-white text-[22px] text-[#dd492b] bg-white border border-white rounded-full p-2 h-[60px] w-[60px] flex items-center justify-center ">
+              <div className="cursor-pointer text-[#dd492b] text-[22px] text-[#dd492b] bg-white border border-white rounded-full p-2 h-[60px] w-[60px] flex items-center justify-center ">
                 {user?.name?.charAt(0)}
               </div>
             </Popover>

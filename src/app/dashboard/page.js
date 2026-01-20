@@ -12,6 +12,7 @@ import Tab6 from "@/app/dashboard/dashboard_subsections/tab6/page";
 import Tab7 from "@/app/dashboard/dashboard_subsections/tab7/page";
 import Tab8 from "@/app/dashboard/dashboard_subsections/tab8/page";
 import Tab9 from "@/app/dashboard/dashboard_subsections/tab9/page";
+import Tab10 from "@/app/dashboard/dashboard_subsections/tab10/page";
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -44,6 +45,8 @@ const Page = () => {
         return <Tab8 />;
       case 8:
         return <Tab9 />;
+      case 10:
+        return <Tab10 />;
       default:
         return null;
     }

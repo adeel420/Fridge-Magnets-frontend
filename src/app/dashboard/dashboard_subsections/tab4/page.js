@@ -21,6 +21,8 @@ const Page = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [size, setSize] = useState("");
+  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
   const [order, setOrder] = useState("");
   const [perfectFor, setPerfectFor] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,10 +35,25 @@ const Page = () => {
         url: URL.createObjectURL(img.file),
         size: img.size,
         price: img.price,
-      }))
+      })),
     );
     setShowModal(false);
   };
+
+  const handleGetCategory = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/category/`,
+      );
+      setCategories(response.data || []);
+    } catch (err) {
+      handleError(err.response?.data?.message || "Failed to fetch categories");
+    }
+  };
+
+  useEffect(() => {
+    handleGetCategory();
+  }, []);
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -60,6 +77,7 @@ const Page = () => {
       formData.append("description", description);
       formData.append("orders", order || "0");
       formData.append("size", size);
+      formData.append("category", category);
       formData.append("price", price);
 
       const perfectForArray = perfectFor
@@ -83,7 +101,7 @@ const Page = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       handleSuccess("Product uploaded successfully!");
@@ -93,6 +111,7 @@ const Page = () => {
       setDescription("");
       setSize("");
       setPrice("");
+      setCategory("");
       setOrder("");
       setPerfectFor("");
       setImageInputs(Array(6).fill({ file: null }));
@@ -107,11 +126,11 @@ const Page = () => {
   const handleGet = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/size/`
+        `${process.env.NEXT_PUBLIC_API_URL}/size/`,
       );
       setSizes(response.data || []);
     } catch (err) {
-      handleError(err);
+      handleError(err.response?.data?.message || "Failed to fetch sizes");
     }
   };
 
@@ -232,6 +251,22 @@ const Page = () => {
               {sizes.map((size) => (
                 <option key={size._id} value={size._id}>
                   {size.size}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm font-medium mb-1">Select Category:</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#dd492b]"
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
                 </option>
               ))}
             </select>

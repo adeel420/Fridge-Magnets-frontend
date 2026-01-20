@@ -8,10 +8,12 @@ import { FaUsers, FaUser } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa6";
 import { GrAnnounce } from "react-icons/gr";
 import { SlSizeFullscreen } from "react-icons/sl";
+import { MdCategory } from "react-icons/md";
 
 export const dashboardTabs = [
   { id: 0, logo: FaUsers, text: "All Users" },
   { id: 1, logo: MdEventNote, text: "Create Events" },
+  { id: 10, logo: MdCategory, text: "Create Categories" },
   { id: 2, logo: SlSizeFullscreen, text: "Create Sizes" },
   { id: 3, logo: MdCreateNewFolder, text: "Create Products" },
   { id: 4, logo: MdOutlineBrowserUpdated, text: "Update Product" },
