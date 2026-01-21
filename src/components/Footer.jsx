@@ -148,7 +148,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/about#faqs"
+                  href="/faqs"
                   className="hover:text-gray-300 transition-colors"
                 >
                   FAQs
