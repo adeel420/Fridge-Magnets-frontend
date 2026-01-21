@@ -169,7 +169,7 @@ export default function Home() {
                 <Truck className="h-8 w-8 text-[#E84C24]" />
               </div>
               <div className="bg-[#E84C24] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg mb-3">
-                4
+                3
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 We Print & Deliver
