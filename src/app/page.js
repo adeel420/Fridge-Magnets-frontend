@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
 import { BounceLoader } from "react-spinners";
+import AutoSignupPopup from "@/components/AutoSignupPopup";
+import { handleError, handleSuccess } from "@/app/utils";
 
 export default function Home() {
   const router = useRouter();
@@ -31,6 +33,7 @@ export default function Home() {
   };
   return (
     <>
+      <AutoSignupPopup />
       {/* Fixed */}
       <div className="fixed top-[160px] bg-[#fde1d3] w-full text-[#dd492b] z-40">
         <div className="flex items-center justify-center h-12 sm:h-14">
