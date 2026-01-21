@@ -127,7 +127,7 @@ export default function Home() {
                 Choose a Design from our magnet selection
               </h3>
               <p className="text-gray-600 text-sm sm:text-base">
-                Choose from our 4 unique magnet sizes
+                Choose from our different magnet sizes and designs
               </p>
             </div>
 
