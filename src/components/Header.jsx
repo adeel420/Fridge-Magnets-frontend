@@ -19,7 +19,7 @@ const navLinks = [
   { label: "Shop", path: "/shop" },
   { label: "Event", path: "/event-section" },
   { label: "About", path: "/about" },
-  { label: "Faqs", path: "/faqs" },
+  { label: "FAQ", path: "/faqs" },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -186,7 +186,9 @@ const Header = () => {
                   {showShopDropdown && (
                     <div className="absolute top-full left-0 bg-white shadow-2xl rounded-xl py-3 min-w-[250px] z-50 border border-gray-100 transform transition-all duration-300 ease-out">
                       <div className="px-4 py-2 border-b border-gray-100">
-                        <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wide">Shop Categories</h3>
+                        <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wide">
+                          Shop Categories
+                        </h3>
                       </div>
                       <button
                         onClick={() => {
@@ -211,8 +213,18 @@ const Header = () => {
                           <div className="w-2 h-2 bg-gray-400 rounded-full mr-3 group-hover:bg-white transition-colors"></div>
                           <span className="font-medium">{category.name}</span>
                           <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
                             </svg>
                           </div>
                         </button>
