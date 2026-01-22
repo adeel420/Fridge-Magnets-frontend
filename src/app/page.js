@@ -132,20 +132,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Our Story */}
-        {/* <section className="mt-32 max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Our Story
-          </h1>
-          <div className="w-24 h-1 bg-[#E84C24] mx-auto mt-4"></div>
-          <p className="text-gray-800 text-base mt-6 sm:text-lg">
-            At Photofy, we are a small business dedicated to creating
-            personalised fridge magnets that capture your cherished moments. Our
-            unique approach combines creativity with memorable experiences,
-            making every occasion special.
-          </p>
-        </section> */}
-
         {/* How It Works Section */}
         <section className="mt-32 max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
