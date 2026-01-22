@@ -275,7 +275,7 @@ const Header = () => {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-2xl text-gray-700"
+          className="md:hidden text-2xl text-white"
         >
           {menuOpen ? <GrClose /> : <GiHamburgerMenu />}
         </button>
