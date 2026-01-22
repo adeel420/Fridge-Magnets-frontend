@@ -4,7 +4,7 @@ import { Mail, Maximize, Pencil, Star, Truck, Upload } from "lucide-react";
 import { FaUser } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { BounceLoader } from "react-spinners";
 import AutoSignupPopup from "@/components/AutoSignupPopup";
@@ -14,6 +14,25 @@ export default function Home() {
   const router = useRouter();
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const heroImages = [
+    "https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951102/img-9_b5z8ym.jpg",
+    "https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951100/img-2_qmbqeq.jpg",
+    "https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951100/img-1_w6vfms.jpg",
+    "https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951101/img-4_ymmbtt.jpg",
+    "https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951101/img-3_gpohjn.jpg",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1,
+      );
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,16 +97,38 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Image */}
-          <div className="w-full md:w-1/2">
-            <Image
-              src="https://res.cloudinary.com/dyyuwwbaq/image/upload/v1750951102/img-9_b5z8ym.jpg"
-              alt="Creative Offer"
-              width={800}
-              height={450}
-              className="w-full h-auto max-h-[450px] object-cover rounded-xl"
-              priority
-            />
+          {/* Image Slideshow */}
+          <div className="w-full md:w-1/2 relative">
+            <div className="relative overflow-hidden rounded-xl">
+              {heroImages.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image}
+                  alt={`Hero Image ${index + 1}`}
+                  width={800}
+                  height={450}
+                  className={`w-full h-auto max-h-[450px] object-cover transition-opacity duration-1000 ${
+                    index === currentImageIndex
+                      ? "opacity-100"
+                      : "opacity-0 absolute top-0 left-0"
+                  }`}
+                  priority={index === 0}
+                />
+              ))}
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {heroImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentImageIndex ? "bg-[#dd492b]" : "bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
