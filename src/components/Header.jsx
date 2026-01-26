@@ -151,7 +151,7 @@ const Header = () => {
       </div>
 
       {/* Main Header */}
-      <div className="max-w-7xl h-[100px] mx-auto bg-[#dd492b] flex items-center justify-between px-4 py-3">
+      <div className=" h-[100px] mx-auto bg-[#dd492b]  flex items-center justify-between px-4 py-3">
         <button
           onClick={() => handleNavigate("/")}
           className="flex items-center"
